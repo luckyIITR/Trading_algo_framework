@@ -18,6 +18,8 @@ class BaseLogin:
         self.refresh_token = refresh_token
 
     # Getter function
+    def get_broker_app_details(self):
+        return self.broker_app_details
     def get_broker_handle(self):
         return self.broker_handle
     def get_access_token(self):
