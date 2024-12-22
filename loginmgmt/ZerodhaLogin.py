@@ -1,12 +1,8 @@
 from loginmgmt.BaseLogin import BaseLogin
 from kiteconnect import KiteConnect
 from dotenv import load_dotenv
-import os
 import json
 import logging
-
-# Load .env file
-load_dotenv("config/.env")
 
 with open("config/zerodha.json", "r") as file:
     config = json.load(file)
