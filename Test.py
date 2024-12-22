@@ -7,13 +7,20 @@ from ordermgmt.KiteConstants import KiteConstants
 from ordermgmt.OrderModifyParams import OrderModifyParams
 from instruments.Instruments import Instruments
 from ticker.ZerodhaTicker import ZerodhaTicker
-
+import datetime
 
 class Test:
     @staticmethod
     def broker_login_api():
         logging.info("Testing Broker Login API")
         Controller.handle_broker_login()
+
+    @staticmethod
+    def test_historical_data():
+        logging.info("Testing Historical Data")
+        fyers_broker_login = Controller.get_fyers_login()
+        df = fyers_broker_login.get_data(symbol="NSE:NIFTY50-INDEX", resolution="1D", range_from=datetime.date(2024, 11, 25), range_to=datetime.date(2024, 12, 10))
+        print(df)
 
     @staticmethod
     def test_ticker():
