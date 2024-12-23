@@ -14,7 +14,7 @@ class Order:
         self.order_status=None
         self.filled_qty = 0 # Filled quantity
         self.pending_qty = 0 # Pending qty
-        self.order_place_timestamp = None # Timestamp when the order is placed
+        self.order_place_timestamp = None # Not using now
         self.order_timestamp = None # Broker timestamp
         self.exchange_timestamp = None #Exchange timestamp
         self.last_order_update_timestamp = None # Applicable if you modify the order Ex: Trailing SL
@@ -42,6 +42,7 @@ class Order:
     def __str__(self):
         return (
             f"Order(trading_symbol={self.trading_symbol}, "
+            f"order_id={self.order_id}, "
             f"transaction_type={self.transaction_type}, "
             f"quantity={self.quantity}, "
             f"product={self.product}, "

@@ -41,7 +41,7 @@ class Utils:
         if is_monthly:
             year = str(expiry_date)[2:4]
             month = expiry_date.strftime("%b").upper()
-            symbol = exchange + ":" + instrument + year + month + str(strike_price) + option_type.upper()
+            symbol = instrument + year + month + str(strike_price) + option_type.upper()
         else:
             year = str(expiry_date)[2:4]
             month = str(expiry_date)[5:7]
@@ -52,7 +52,7 @@ class Utils:
             elif month == '12':
                 month = 'D'
             exp_date = str(expiry_date)[-2:]
-            symbol = exchange + ":" + instrument + year + month + str(exp_date) + str(strike_price) + option_type.upper()
+            symbol = instrument + year + month + str(exp_date) + str(strike_price) + option_type.upper()
         return symbol
 
     @staticmethod
@@ -145,3 +145,20 @@ class Utils:
             nearest_date -= datetime.timedelta(days=1)
 
         return nearest_date
+
+
+    @staticmethod
+    def round_to_exchange_price(calculated_price, tick=0.05):
+        """
+        Convert a calculated price to the nearest exchange price based on tick size.
+
+        Args:
+            calculated_price (float): The price you calculated.
+            tick (float): The tick size of the exchange (default is 0.05).
+
+        Returns:
+            float: The adjusted price matching the exchange tick size.
+        """
+        # Round down to the nearest tick multiple
+        exchange_price = (calculated_price // tick) * tick
+        return round(exchange_price + 0.05, 2)

@@ -22,10 +22,11 @@ class ZerodhaOrderManager(BaseOrderManager):
                 order_type=order.order_type)
             logging.info(f'Order placed successfully, order_id = {order_id}')
             order.set_order_id(order_id)
-            return order
+            return order_id
         except Exception as e:
             logging.info(f"Order placement failed: {e}")
             # raise Exception(str(e))
+
     def modify_order(self, order, order_modify_params):
         logging.info(f"Going to modify order with params: {order_modify_params}")
         kite = self.broker_handle

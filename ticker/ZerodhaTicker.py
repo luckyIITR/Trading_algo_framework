@@ -40,6 +40,7 @@ class ZerodhaTicker(BaseTicker):
             tokens.append(token)
         logging.info('ZerodhaTicker Subscribing tokens %s', tokens)
         self.ticker.subscribe(tokens)
+        self.ticker.set_mode(self.ticker.MODE_LTP, tokens)
 
     def unregister_symbol(self, symbols):
         tokens = []

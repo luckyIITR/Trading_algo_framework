@@ -45,7 +45,7 @@ class Controller:
 
     @staticmethod
     def get_broker_name():
-        return Controller.broker_name
+        return Controller.main_broker_name
 
     @staticmethod
     def get_broker_login():

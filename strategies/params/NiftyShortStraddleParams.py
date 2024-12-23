@@ -4,6 +4,7 @@ class NiftyShortStraddleParams:
     # Parameters
     instrument = 'NIFTY'
     spot_symbol = "NSE:NIFTY 50"
+    fyers_spot_symbol = "NSE:NIFTY50-INDEX"
     expiry_day = "Thursday"
     options_gap = 50
     pre_market_time = datetime.time(9, 8)
