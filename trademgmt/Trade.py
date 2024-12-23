@@ -17,9 +17,12 @@ class Trade:
         self.is_options = False  # Options trade
         self.option_type = None  # CE/PE. Applicable only if isOptions is True
         self.requested_order_entry_type = KiteConstants.ORDER_TYPE_MARKET
-        self.requested_price = 0
-        self.entry_price = 0
+        self.requested_price = None
+        self.trigger_price = None
+        self.entry_price = None
         self.qty = 0
+        self.stop_loss = None  # This is the current stop loss.
+        self.target = None
 
         self.trade_state = TradeState.CREATED
         self.createTimestamp = datetime.now()  # Timestamp when the trade is created (Not triggered)
