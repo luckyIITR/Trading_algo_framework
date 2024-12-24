@@ -13,6 +13,7 @@ from ordermgmt.Order import Order
 from ordermgmt.ZerodhaOrderManager import ZerodhaOrderManager
 import threading
 from strategies.StrategyState.ShortStraddleState import ShortStraddleState
+import pickle
 
 class ShortStraddle(BaseStrategy):
     orders_id_map = {}
@@ -24,19 +25,19 @@ class ShortStraddle(BaseStrategy):
     def __init__(self, params):
         super().__init__("Short Straddle")
 
-        self.lot_size = None
+        self.lot_size = 25
         self.square_off_time = params.square_off_time
         self.isFnO = True
         self.atr_window = params.atr_window
         self.instrument = params.instrument
         self.spot_symbol = params.spot_symbol
-        # self.today_date = datetime.datetime.now().date()
-        # self.day = datetime.datetime.now().strftime("%A")
-        self.today_date = datetime.date(2024, 12, 20)
-        self.day = self.today_date.strftime("%A")
+        self.today_date = datetime.datetime.now().date()
+        self.day = datetime.datetime.now().strftime("%A")
+        # self.today_date = datetime.date(2024, 12, 20)
+        # self.day = self.today_date.strftime("%A")
 
         self.start_datetime = datetime.datetime.combine(self.today_date, params.start_time)
-        self.stop_datetime = datetime.datetime.combine(self.today_date, params.stop_time)
+        self.stop_datetime = datetime.datetime.combine(self.today_date, params.square_off_time)
         self.expiry_rule = params.expiry_rules[self.day]
         self.sl_atr_rule = params.sl_atr_rule[self.day]
         self.rr = params.rr
@@ -46,7 +47,6 @@ class ShortStraddle(BaseStrategy):
         self.expiry_day = params.expiry_day
         self.fyers_spot_symbol = params.fyers_spot_symbol
         self.atr_range = self.get_atr_range()
-
         self.order_manager = ZerodhaOrderManager()
 
         # Start ticker
@@ -63,30 +63,74 @@ class ShortStraddle(BaseStrategy):
         self.pe_sl_order = None
         self.target_order = None
 
-        self.target_points = None
         self.pe_sl_price = None
         self.ce_sl_price = None
         ShortStraddle.strategy_state = ShortStraddleState.STRADDLE_STARTED
         # Create a shared event for signaling
         self.stop_event = threading.Event()
-    @staticmethod
-    def tick_listner(tick):
-        pass
+
+    def save_state(self, filepath=f"short_straddle_state_{datetime.datetime.now().date()}.pkl"):
+        state = {
+                "orders_id_map" : ShortStraddle.orders_id_map,
+                "total_points_sold" : ShortStraddle.total_points_sold,
+                "target_points" : ShortStraddle.target_points,
+                "target_achieved" : ShortStraddle.target_achieved,
+                "strategy_state" : ShortStraddle.strategy_state,
+                "ce_option_symbol" : self.ce_option_symbol,
+                "pe_option_symbol" : self.pe_option_symbol,
+                "ce_entry_order" : self.ce_entry_order,
+                "pe_entry_order" : self.pe_entry_order,
+                "ce_sl_order" : self.ce_sl_order,
+                "pe_sl_order" : self.pe_sl_order,
+                "target_order" : self.target_order,
+                "pe_sl_price" : self.pe_sl_price,
+                "ce_sl_price" : self.ce_sl_price,
+                "threading_event" : True if self.stop_event.is_set() else False,
+            }
+        with open(filepath, "wb") as f:
+            pickle.dump(state, f)
+        logging.info("State saved successfully.")
+
+    def load_state(self, filepath=f"short_straddle_state_{datetime.datetime.now().date()}.pkl"):
+        try:
+            with open(filepath, "rb") as f:
+                state = pickle.load(f)
+            ShortStraddle.orders_id_map = state.get("orders_id_map")
+            ShortStraddle.total_points_sold = state.get("total_points_sold")
+            ShortStraddle.target_points = state.get("target_points")
+            ShortStraddle.target_achieved = state.get("target_achieved")
+            ShortStraddle.strategy_state = state.get("strategy_state")
+            self.ce_option_symbol = state.get("ce_option_symbol")
+            self.pe_option_symbol = state.get("pe_option_symbol")
+            self.ce_entry_order = state.get("ce_entry_order")
+            self.pe_entry_order = state.get("pe_entry_order")
+            self.ce_sl_order = state.get("ce_sl_order")
+            self.pe_sl_order = state.get("pe_sl_order")
+            self.target_order = state.get("target_order")
+            self.pe_sl_price = state.get("pe_sl_price")
+            self.ce_sl_price = state.get("ce_sl_price")
+            if state.get("threading_event"):
+                self.stop_event.set()
+            logging.info("State loaded successfully.")
+        except FileNotFoundError:
+            logging.warning("State file not found. Starting fresh.")
 
     @staticmethod
-    def wait_for_key(order_id, timeout=5):
+    def wait_for_key(order_id, timeout=30):
+        logging.info("Waiting for order to update")
         start_time = time.time()
         while time.time() - start_time < timeout:
             if order_id in ShortStraddle.orders_id_map:
                 return True
-            time.sleep(0.1)  # Check every 0.1 second
         return False
 
     @staticmethod
     def order_update_listner(data):
         logging.info(f"order update: {data}")
         # Wait for key
-        ShortStraddle.wait_for_key(data['order_id'], timeout=5)
+        if not ShortStraddle.wait_for_key(data['order_id'], timeout=5):
+            logging.info("Order update failed.")
+            return
 
         order = ShortStraddle.orders_id_map[data['order_id']]
         order.order_status = data['status']
@@ -96,37 +140,57 @@ class ShortStraddle(BaseStrategy):
         order.order_timestamp = data['order_timestamp']
         order.exchange_timestamp = data['exchange_timestamp']
         order.message = data['status_message']
+        logging.info("Order updated successfully.")
 
-    def process(self):
-        logging.info(f"Short Straddle in {self.instrument} starting...")
+    def _wait_for_pre_market(self):
         if datetime.datetime.now() < self.pre_market_datetime:
             wait_time = Utils.get_epoch(self.pre_market_datetime) - Utils.get_epoch(datetime.datetime.now())
             logging.info(f"Waiting for {wait_time} seconds to finish pre-market...")
             time.sleep(wait_time+10)
 
-        self.ce_option_symbol, self.pe_option_symbol = self.get_atm_options_symbols_n_laod_lot_size()
+    def process(self):
+        try:
+            logging.info(f"Short Straddle in {self.instrument} starting...")
+            # Load previous state if available
+            self.load_state()
+            time.sleep(5)
 
-        # Entry Order Stage
-        self.entry_order_placement_stage()
+            if ShortStraddle.strategy_state == ShortStraddleState.STRADDLE_STARTED:
+                self._wait_for_pre_market()
+                # Entry Order Stage
+                self.entry_order_placement_stage()
 
-        # Place SL Order Stage
-        self.sl_order_placement_stage()
+            if ShortStraddle.strategy_state == ShortStraddleState.ENTRY_ORDER_PLACED:
+                # Place SL Order Stage
+                self.sl_order_placement_stage()
 
-        # run two parallel functions: Chase_target_phase and waiting_for_sl_to_hit_phase
-        logging.info("Starting Parallel Target and SL Phase")
-        thread1 = threading.Thread(target=self.chase_target_phase)
-        thread2 = threading.Thread(target=self.waiting_for_sl_to_hit_phase)
-        thread1.start()
-        thread2.start()
+            if ShortStraddle.strategy_state == ShortStraddleState.SL_ORDER_PLACED:
+                # run two parallel functions: Chase_target_phase and waiting_for_sl_to_hit_phase
+                logging.info("Starting Parallel Target and SL Phase")
+                thread1 = threading.Thread(target=self.chase_target_phase)
+                thread2 = threading.Thread(target=self.waiting_for_sl_to_hit_phase)
+                thread1.start()
+                thread2.start()
 
-        # Check state and proceed
-        if (ShortStraddle.strategy_state == ShortStraddleState.CE_SL_HIT) or (ShortStraddle.strategy_state == ShortStraddleState.PE_SL_HIT):
-            # Set target for other
-            self.set_target_for_other_phase()
-            self.wait_for_target_sl_stop_time_phase()
+                thread1.join()
+                thread2.join()
 
-        time.sleep(10)
-        self.ticker.stop_ticker()
+            # Check state and proceed
+            if (ShortStraddle.strategy_state == ShortStraddleState.CE_SL_HIT) or (ShortStraddle.strategy_state == ShortStraddleState.PE_SL_HIT):
+                # Set target for other
+                self.set_target_for_other_phase()
+                self.wait_for_target_sl_stop_time_phase()
+
+            self.save_state()
+            time.sleep(10)
+            self.ticker.stop_ticker()
+        except KeyboardInterrupt:
+            logging.info("KeyboardInterrupt detected. Saving state before exiting...")
+            self.save_state()  # Save state before exiting
+            logging.info("State saved successfully. Exiting...")
+        except Exception as e:
+            logging.error(f"Unexpected error occurred: {e}")
+            self.save_state()  # Save state even for other exceptions
 
     def wait_for_target_sl_stop_time_phase(self):
         logging.info("Waiting for Target or SL to hit or Stop time Phase...")
@@ -223,6 +287,7 @@ class ShortStraddle(BaseStrategy):
 
     @staticmethod
     def target_check_callback(ticks):
+        # logging.info(ticks)
         # check it should have length of two
         if len(ticks) < 2:
             return
@@ -283,8 +348,9 @@ class ShortStraddle(BaseStrategy):
                       transaction_type=KiteConstants.TRANSACTION_TYPE_BUY,
                       quantity=self.lot_size * self.get_num_lots(),
                       product=KiteConstants.PRODUCT_MIS,
-                      order_type=KiteConstants.ORDER_TYPE_SLM,
-                      trigger_price=self.ce_sl_price
+                      order_type=KiteConstants.ORDER_TYPE_SL,
+                      price=Utils.round_to_exchange_price(self.ce_sl_price + 5),
+                      trigger_price=self.ce_sl_price,
                       )
 
         self.pe_sl_order = Order(variety=KiteConstants.VARIETY_REGULAR,
@@ -293,8 +359,9 @@ class ShortStraddle(BaseStrategy):
                       transaction_type=KiteConstants.TRANSACTION_TYPE_BUY,
                       quantity=self.lot_size * self.get_num_lots(),
                       product=KiteConstants.PRODUCT_MIS,
-                      order_type=KiteConstants.ORDER_TYPE_SLM,
-                      trigger_price=self.pe_sl_price
+                      order_type=KiteConstants.ORDER_TYPE_SL,
+                      price=Utils.round_to_exchange_price(self.pe_sl_price + 5),
+                      trigger_price=self.pe_sl_price,
                       )
         # Place the orders
         ShortStraddle.orders_id_map[self.order_manager.place_order(self.ce_sl_order)] = self.ce_sl_order
@@ -306,6 +373,7 @@ class ShortStraddle(BaseStrategy):
     def entry_order_placement_stage(self):
         logging.info("Entry Order Placement Stage...")
 
+        self.ce_option_symbol, self.pe_option_symbol = self.get_atm_options_symbols_n_laod_lot_size()
         order_ce = self.create_entry_order(self.ce_option_symbol)
         order_pe = self.create_entry_order(self.pe_option_symbol)
 
@@ -316,9 +384,16 @@ class ShortStraddle(BaseStrategy):
         ShortStraddle.orders_id_map[self.order_manager.place_order(order_ce)] = order_ce
         ShortStraddle.orders_id_map[self.order_manager.place_order(order_pe)] = order_pe
 
+        logging.info("Waiting for orders to get updated")
+        while (order_pe.average_price is None) or (order_ce.average_price is None):
+            continue
+
         ShortStraddle.total_points_sold = order_ce.average_price + order_pe.average_price
+        logging.info(f"Total Points Sold: {ShortStraddle.total_points_sold}")
+
         # Change state to Entry Order Placed
         ShortStraddle.strategy_state = ShortStraddleState.ENTRY_ORDER_PLACED
+
 
     def create_entry_order(self, option_symbol):
         order = Order(variety=KiteConstants.VARIETY_REGULAR,

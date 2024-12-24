@@ -1,0 +1,621 @@
+2024-12-24 10:45:52,108 - INFO - handle_broker_login function called
+2024-12-24 10:45:52,109 - INFO - loaded broker data of: Zerodha
+2024-12-24 10:45:52,109 - INFO - loaded broker data of: Fyers
+2024-12-24 10:45:52,109 - INFO - Zerodha Login is being used
+2024-12-24 10:45:52,111 - DEBUG - Starting new HTTPS connection (1): api.kite.trade:443
+2024-12-24 10:45:52,358 - DEBUG - https://api.kite.trade:443 "GET /user/profile HTTP/11" 200 None
+2024-12-24 10:45:52,359 - INFO - User ID: BI3034, Lucky Kushwaha Connected!
+2024-12-24 10:45:52,362 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 10:45:52,628 - DEBUG - https://api-t1.fyers.in:443 "GET /api/v3/profile HTTP/11" 200 None
+2024-12-24 10:45:52,633 - INFO - Client ID: DL00155, Name: LUCKY KUSHWAHA Connected!
+2024-12-24 10:45:52,661 - INFO - Starting Algo...
+2024-12-24 10:45:52,661 - INFO - Going to fetch instruments from server...
+2024-12-24 10:45:52,762 - DEBUG - https://api.kite.trade:443 "GET /instruments/NSE HTTP/11" 200 126877
+2024-12-24 10:45:52,897 - DEBUG - https://api.kite.trade:443 "GET /instruments/NFO HTTP/11" 200 518780
+2024-12-24 10:45:53,487 - INFO - Fetched 45944 instruments from server.
+2024-12-24 10:45:53,502 - INFO - Testing Instruments Mapping
+2024-12-24 10:45:53,502 - INFO - NIFTY 50 -> 256265
+2024-12-24 10:45:53,502 - INFO - 256265 -> NIFTY 50
+2024-12-24 10:45:53,505 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 10:45:53,699 - DEBUG - https://api-t1.fyers.in:443 "GET /data/history?symbol=NSE%3ANIFTY50-INDEX&resolution=1D&date_format=1&range_from=2024-11-04&range_to=2024-12-23&cont_flag=1&oi_flag=1 HTTP/11" 200 688
+2024-12-24 10:45:53,762 - INFO - Calculated ATR: 309.53885193693077
+2024-12-24 10:45:53,762 - INFO - ZerodhaTicker: Going to connect..
+2024-12-24 10:45:53,763 - INFO - Short Straddle in NIFTY starting...
+2024-12-24 10:45:53,763 - WARNING - State file not found. Starting fresh.
+2024-12-24 10:45:53,763 - INFO - Entry Order Placement Stage...
+2024-12-24 10:45:53,844 - DEBUG - https://api.kite.trade:443 "GET /quote/ohlc?i=NSE%3ANIFTY+50 HTTP/11" 200 None
+2024-12-24 10:45:53,844 - INFO - NIFTY Open Price: 23826.6, ATM Strike Price: 23850, expiry date: 2024-12-26
+2024-12-24 10:45:53,844 - INFO - CE Option Symbol: NIFTY24DEC23850CE, PE Option Symbol: NIFTY24DEC23850PE
+2024-12-24 10:45:53,844 - INFO - Checking options symbol validity...
+2024-12-24 10:45:53,926 - DEBUG - https://api.kite.trade:443 "GET /quote/ohlc?i=NFO%3ANIFTY24DEC23850CE HTTP/11" 200 None
+2024-12-24 10:45:53,926 - INFO - {'NFO:NIFTY24DEC23850CE': {'instrument_token': 10672386, 'last_price': 83.05, 'ohlc': {'open': 59.9, 'high': 104.9, 'low': 38, 'close': 63.6}}}
+2024-12-24 10:45:53,934 - INFO - Ticker connection successful.
+2024-12-24 10:45:54,013 - DEBUG - https://api.kite.trade:443 "GET /quote/ohlc?i=NFO%3ANIFTY24DEC23850PE HTTP/11" 200 None
+2024-12-24 10:45:54,014 - INFO - {'NFO:NIFTY24DEC23850PE': {'instrument_token': 10672642, 'last_price': 85.55, 'ohlc': {'open': 141, 'high': 174.75, 'low': 71.3, 'close': 143.85}}}
+2024-12-24 10:45:54,110 - DEBUG - https://api.kite.trade:443 "GET /instruments/NFO HTTP/11" 200 518780
+2024-12-24 10:45:54,665 - INFO - Lot Size: 25
+2024-12-24 10:45:54,665 - INFO - Waiting for market to open
+2024-12-24 10:45:54,665 - INFO - Going to place order with params: Order(trading_symbol=NIFTY24DEC23850CE, order_id=None, transaction_type=SELL, quantity=25, product=MIS, order_type=MARKET, price=None, order_place_timestamp=None)
+2024-12-24 10:45:54,860 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607207', 'exchange_order_id': '1300000046325006', 'parent_order_id': None, 'status': 'OPEN', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 10:45:54', 'exchange_update_timestamp': '2024-12-24 10:45:54', 'exchange_timestamp': '2024-12-24 10:45:54', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850CE', 'instrument_token': 10672386, 'order_type': 'MARKET', 'transaction_type': 'SELL', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 0, 'trigger_price': 0, 'average_price': 0, 'filled_quantity': 0, 'pending_quantity': 25, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032XDpd2sXPxC7eY'}
+2024-12-24 10:45:54,861 - INFO - Waiting for order to update
+2024-12-24 10:45:54,973 - DEBUG - https://api.kite.trade:443 "POST /orders/regular HTTP/11" 200 None
+2024-12-24 10:45:54,986 - INFO - Order placed successfully, order_id = 241224200607207
+2024-12-24 10:45:54,992 - INFO - Going to place order with params: Order(trading_symbol=NIFTY24DEC23850PE, order_id=None, transaction_type=SELL, quantity=25, product=MIS, order_type=MARKET, price=None, order_place_timestamp=None)
+2024-12-24 10:45:54,992 - INFO - Order updated successfully.
+2024-12-24 10:45:54,993 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607207', 'exchange_order_id': '1300000046325006', 'parent_order_id': None, 'status': 'COMPLETE', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 10:45:54', 'exchange_update_timestamp': '2024-12-24 10:45:54', 'exchange_timestamp': '2024-12-24 10:45:54', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850CE', 'instrument_token': 10672386, 'order_type': 'MARKET', 'transaction_type': 'SELL', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 0, 'trigger_price': 0, 'average_price': 83.25, 'filled_quantity': 25, 'pending_quantity': 0, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032XDpd2sXPxC7eY'}
+2024-12-24 10:45:54,993 - INFO - Waiting for order to update
+2024-12-24 10:45:54,993 - INFO - Order updated successfully.
+2024-12-24 10:45:55,109 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607230', 'exchange_order_id': '1300000046326113', 'parent_order_id': None, 'status': 'OPEN', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 10:45:55', 'exchange_update_timestamp': '2024-12-24 10:45:55', 'exchange_timestamp': '2024-12-24 10:45:55', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850PE', 'instrument_token': 10672642, 'order_type': 'MARKET', 'transaction_type': 'SELL', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 0, 'trigger_price': 0, 'average_price': 0, 'filled_quantity': 0, 'pending_quantity': 25, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032XlQNwEVhlGK2Z'}
+2024-12-24 10:45:55,109 - INFO - Waiting for order to update
+2024-12-24 10:45:55,141 - DEBUG - https://api.kite.trade:443 "POST /orders/regular HTTP/11" 200 None
+2024-12-24 10:45:55,159 - INFO - Order placed successfully, order_id = 241224200607230
+2024-12-24 10:45:55,172 - INFO - Waiting for orders to get updated
+2024-12-24 10:45:55,172 - INFO - Order updated successfully.
+2024-12-24 10:45:55,172 - INFO - Total Points Sold: 83.25
+2024-12-24 10:45:55,172 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607230', 'exchange_order_id': '1300000046326113', 'parent_order_id': None, 'status': 'COMPLETE', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 10:45:55', 'exchange_update_timestamp': '2024-12-24 10:45:55', 'exchange_timestamp': '2024-12-24 10:45:55', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850PE', 'instrument_token': 10672642, 'order_type': 'MARKET', 'transaction_type': 'SELL', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 0, 'trigger_price': 0, 'average_price': 85.05, 'filled_quantity': 25, 'pending_quantity': 0, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032XlQNwEVhlGK2Z'}
+2024-12-24 10:45:55,172 - INFO - SL Order Placement Stage...
+2024-12-24 10:45:55,172 - INFO - Waiting for order to update
+2024-12-24 10:45:55,172 - INFO - total_loss_points: 46.43082779053962
+2024-12-24 10:45:55,172 - INFO - Order updated successfully.
+2024-12-24 10:45:55,172 - INFO - ce_selling_price: 83.25, pe_selling_price: 85.05
+2024-12-24 10:45:55,172 - INFO - Going to place order with params: Order(trading_symbol=NIFTY24DEC23850CE, order_id=None, transaction_type=BUY, quantity=25, product=MIS, order_type=SL, price=111.25, order_place_timestamp=None)
+2024-12-24 10:45:55,288 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607241', 'exchange_order_id': '1300000046327596', 'parent_order_id': None, 'status': 'TRIGGER PENDING', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 10:45:55', 'exchange_update_timestamp': '2024-12-24 10:45:55', 'exchange_timestamp': '2024-12-24 10:45:55', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850CE', 'instrument_token': 10672386, 'order_type': 'SL', 'transaction_type': 'BUY', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 111.25, 'trigger_price': 106.25, 'average_price': 0, 'filled_quantity': 0, 'pending_quantity': 25, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032XRWWoi554jmDD'}
+2024-12-24 10:45:55,288 - INFO - Waiting for order to update
+2024-12-24 10:45:55,313 - DEBUG - https://api.kite.trade:443 "POST /orders/regular HTTP/11" 200 None
+2024-12-24 10:45:55,346 - INFO - Order placed successfully, order_id = 241224200607241
+2024-12-24 10:45:55,358 - INFO - Going to place order with params: Order(trading_symbol=NIFTY24DEC23850PE, order_id=None, transaction_type=BUY, quantity=25, product=MIS, order_type=SL, price=113.55, order_place_timestamp=None)
+2024-12-24 10:45:55,359 - INFO - Order updated successfully.
+2024-12-24 10:45:55,440 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607245', 'exchange_order_id': '1300000046328749', 'parent_order_id': None, 'status': 'TRIGGER PENDING', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 10:45:55', 'exchange_update_timestamp': '2024-12-24 10:45:55', 'exchange_timestamp': '2024-12-24 10:45:55', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850PE', 'instrument_token': 10672642, 'order_type': 'SL', 'transaction_type': 'BUY', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 113.55, 'trigger_price': 108.55, 'average_price': 0, 'filled_quantity': 0, 'pending_quantity': 25, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032X40IYlsJ6dUgD'}
+2024-12-24 10:45:55,440 - INFO - Waiting for order to update
+2024-12-24 10:45:55,463 - DEBUG - https://api.kite.trade:443 "POST /orders/regular HTTP/11" 200 None
+2024-12-24 10:45:55,482 - INFO - Order placed successfully, order_id = 241224200607245
+2024-12-24 10:45:55,494 - INFO - Starting Parallel Target and SL Phase
+2024-12-24 10:45:55,494 - INFO - Order updated successfully.
+2024-12-24 10:45:55,495 - INFO - Starting Target Chasing Phase...
+2024-12-24 10:45:55,495 - INFO - Waiting for Either SL order to hit...
+2024-12-24 10:45:55,495 - INFO - Chasing Target Points: 46.43082779053962
+2024-12-24 10:45:55,507 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850CE token = 10672386
+2024-12-24 10:45:55,520 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850PE token = 10672642
+2024-12-24 10:45:55,532 - INFO - ZerodhaTicker Subscribing tokens [10672386, 10672642]
+2024-12-24 11:58:18,460 - INFO - KeyboardInterrupt detected. Saving state before exiting...
+2024-12-24 11:58:18,514 - INFO - State saved successfully.
+2024-12-24 11:58:18,527 - INFO - State saved successfully. Exiting...
+2024-12-24 11:58:31,738 - INFO - handle_broker_login function called
+2024-12-24 11:58:31,739 - INFO - loaded broker data of: Zerodha
+2024-12-24 11:58:31,739 - INFO - loaded broker data of: Fyers
+2024-12-24 11:58:31,739 - INFO - Zerodha Login is being used
+2024-12-24 11:58:31,742 - DEBUG - Starting new HTTPS connection (1): api.kite.trade:443
+2024-12-24 11:58:32,137 - DEBUG - https://api.kite.trade:443 "GET /user/profile HTTP/11" 200 None
+2024-12-24 11:58:32,139 - INFO - User ID: BI3034, Lucky Kushwaha Connected!
+2024-12-24 11:58:32,143 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 11:58:32,543 - DEBUG - https://api-t1.fyers.in:443 "GET /api/v3/profile HTTP/11" 200 None
+2024-12-24 11:58:32,549 - INFO - Client ID: DL00155, Name: LUCKY KUSHWAHA Connected!
+2024-12-24 11:58:32,576 - INFO - Starting Algo...
+2024-12-24 11:58:32,576 - INFO - Going to fetch instruments from server...
+2024-12-24 11:58:33,278 - DEBUG - https://api.kite.trade:443 "GET /instruments/NSE HTTP/11" 200 126877
+2024-12-24 11:58:33,799 - DEBUG - https://api.kite.trade:443 "GET /instruments/NFO HTTP/11" 200 518780
+2024-12-24 11:58:34,469 - INFO - Fetched 45944 instruments from server.
+2024-12-24 11:58:34,484 - INFO - Testing Instruments Mapping
+2024-12-24 11:58:34,484 - INFO - NIFTY 50 -> 256265
+2024-12-24 11:58:34,484 - INFO - 256265 -> NIFTY 50
+2024-12-24 11:58:34,487 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 11:58:34,849 - DEBUG - https://api-t1.fyers.in:443 "GET /data/history?symbol=NSE%3ANIFTY50-INDEX&resolution=1D&date_format=1&range_from=2024-11-04&range_to=2024-12-23&cont_flag=1&oi_flag=1 HTTP/11" 200 688
+2024-12-24 11:58:34,910 - INFO - Calculated ATR: 309.53885193693077
+2024-12-24 11:58:34,911 - INFO - ZerodhaTicker: Going to connect..
+2024-12-24 11:58:34,911 - INFO - Short Straddle in NIFTY starting...
+2024-12-24 11:58:34,911 - INFO - State loaded successfully.
+2024-12-24 11:58:34,911 - INFO - Starting Parallel Target and SL Phase
+2024-12-24 11:58:34,912 - INFO - Starting Target Chasing Phase...
+2024-12-24 11:58:34,912 - INFO - Waiting for Either SL order to hit...
+2024-12-24 11:58:35,346 - INFO - Ticker connection successful.
+2024-12-24 11:58:53,595 - INFO - KeyboardInterrupt detected. Saving state before exiting...
+2024-12-24 11:58:53,626 - INFO - State saved successfully.
+2024-12-24 11:58:53,634 - INFO - State saved successfully. Exiting...
+2024-12-24 11:59:05,291 - INFO - handle_broker_login function called
+2024-12-24 11:59:05,291 - INFO - loaded broker data of: Zerodha
+2024-12-24 11:59:05,291 - INFO - loaded broker data of: Fyers
+2024-12-24 11:59:05,291 - INFO - Zerodha Login is being used
+2024-12-24 11:59:05,294 - DEBUG - Starting new HTTPS connection (1): api.kite.trade:443
+2024-12-24 11:59:05,678 - DEBUG - https://api.kite.trade:443 "GET /user/profile HTTP/11" 200 None
+2024-12-24 11:59:05,679 - INFO - User ID: BI3034, Lucky Kushwaha Connected!
+2024-12-24 11:59:05,683 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 11:59:05,988 - DEBUG - https://api-t1.fyers.in:443 "GET /api/v3/profile HTTP/11" 200 None
+2024-12-24 11:59:05,993 - INFO - Client ID: DL00155, Name: LUCKY KUSHWAHA Connected!
+2024-12-24 11:59:06,013 - INFO - Starting Algo...
+2024-12-24 11:59:06,013 - INFO - Going to fetch instruments from server...
+2024-12-24 11:59:06,168 - DEBUG - https://api.kite.trade:443 "GET /instruments/NSE HTTP/11" 200 126877
+2024-12-24 11:59:06,365 - DEBUG - https://api.kite.trade:443 "GET /instruments/NFO HTTP/11" 200 518780
+2024-12-24 11:59:07,038 - INFO - Fetched 45944 instruments from server.
+2024-12-24 11:59:07,054 - INFO - Testing Instruments Mapping
+2024-12-24 11:59:07,054 - INFO - NIFTY 50 -> 256265
+2024-12-24 11:59:07,054 - INFO - 256265 -> NIFTY 50
+2024-12-24 11:59:07,057 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 11:59:07,364 - DEBUG - https://api-t1.fyers.in:443 "GET /data/history?symbol=NSE%3ANIFTY50-INDEX&resolution=1D&date_format=1&range_from=2024-11-04&range_to=2024-12-23&cont_flag=1&oi_flag=1 HTTP/11" 200 688
+2024-12-24 11:59:07,432 - INFO - Calculated ATR: 309.53885193693077
+2024-12-24 11:59:07,432 - INFO - ZerodhaTicker: Going to connect..
+2024-12-24 11:59:07,433 - INFO - Short Straddle in NIFTY starting...
+2024-12-24 11:59:07,433 - INFO - State loaded successfully.
+2024-12-24 11:59:07,434 - INFO - Starting Parallel Target and SL Phase
+2024-12-24 11:59:07,434 - INFO - Starting Target Chasing Phase...
+2024-12-24 11:59:07,434 - INFO - Waiting for Either SL order to hit...
+2024-12-24 11:59:07,827 - INFO - Ticker connection successful.
+2024-12-24 11:59:17,961 - INFO - KeyboardInterrupt detected. Saving state before exiting...
+2024-12-24 11:59:17,993 - INFO - State saved successfully.
+2024-12-24 11:59:18,000 - INFO - State saved successfully. Exiting...
+2024-12-24 12:00:20,748 - INFO - handle_broker_login function called
+2024-12-24 12:00:20,749 - INFO - loaded broker data of: Zerodha
+2024-12-24 12:00:20,749 - INFO - loaded broker data of: Fyers
+2024-12-24 12:00:20,749 - INFO - Zerodha Login is being used
+2024-12-24 12:00:20,752 - DEBUG - Starting new HTTPS connection (1): api.kite.trade:443
+2024-12-24 12:00:21,188 - DEBUG - https://api.kite.trade:443 "GET /user/profile HTTP/11" 200 None
+2024-12-24 12:00:21,189 - INFO - User ID: BI3034, Lucky Kushwaha Connected!
+2024-12-24 12:00:21,193 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 12:00:21,588 - DEBUG - https://api-t1.fyers.in:443 "GET /api/v3/profile HTTP/11" 200 None
+2024-12-24 12:00:21,594 - INFO - Client ID: DL00155, Name: LUCKY KUSHWAHA Connected!
+2024-12-24 12:00:21,619 - INFO - Starting Algo...
+2024-12-24 12:00:21,620 - INFO - Going to fetch instruments from server...
+2024-12-24 12:00:21,720 - DEBUG - https://api.kite.trade:443 "GET /instruments/NSE HTTP/11" 200 126877
+2024-12-24 12:00:21,873 - DEBUG - https://api.kite.trade:443 "GET /instruments/NFO HTTP/11" 200 518780
+2024-12-24 12:00:22,511 - INFO - Fetched 45944 instruments from server.
+2024-12-24 12:00:22,525 - INFO - Testing Instruments Mapping
+2024-12-24 12:00:22,526 - INFO - NIFTY 50 -> 256265
+2024-12-24 12:00:22,526 - INFO - 256265 -> NIFTY 50
+2024-12-24 12:00:22,529 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 12:00:22,795 - DEBUG - https://api-t1.fyers.in:443 "GET /data/history?symbol=NSE%3ANIFTY50-INDEX&resolution=1D&date_format=1&range_from=2024-11-04&range_to=2024-12-23&cont_flag=1&oi_flag=1 HTTP/11" 200 688
+2024-12-24 12:00:22,859 - INFO - Calculated ATR: 309.53885193693077
+2024-12-24 12:00:22,859 - INFO - ZerodhaTicker: Going to connect..
+2024-12-24 12:00:22,860 - INFO - Short Straddle in NIFTY starting...
+2024-12-24 12:00:22,860 - INFO - State loaded successfully.
+2024-12-24 12:00:22,860 - INFO - Starting Parallel Target and SL Phase
+2024-12-24 12:00:22,861 - INFO - Starting Target Chasing Phase...
+2024-12-24 12:00:22,861 - INFO - Waiting for Either SL order to hit...
+2024-12-24 12:00:22,861 - INFO - Chasing Target Points: 46.43082779053962
+2024-12-24 12:00:22,873 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850CE token = 10672386
+2024-12-24 12:00:22,880 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850PE token = 10672642
+2024-12-24 12:00:22,880 - INFO - ZerodhaTicker Subscribing tokens [10672386, 10672642]
+2024-12-24 12:00:23,230 - INFO - Ticker connection successful.
+2024-12-24 12:00:46,166 - INFO - KeyboardInterrupt detected. Saving state before exiting...
+2024-12-24 12:00:46,192 - INFO - State saved successfully.
+2024-12-24 12:00:46,199 - INFO - State saved successfully. Exiting...
+2024-12-24 12:01:03,077 - INFO - handle_broker_login function called
+2024-12-24 12:01:03,078 - INFO - loaded broker data of: Zerodha
+2024-12-24 12:01:03,078 - INFO - loaded broker data of: Fyers
+2024-12-24 12:01:03,078 - INFO - Zerodha Login is being used
+2024-12-24 12:01:03,082 - DEBUG - Starting new HTTPS connection (1): api.kite.trade:443
+2024-12-24 12:01:03,305 - DEBUG - https://api.kite.trade:443 "GET /user/profile HTTP/11" 200 None
+2024-12-24 12:01:03,307 - INFO - User ID: BI3034, Lucky Kushwaha Connected!
+2024-12-24 12:01:03,310 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 12:01:03,605 - DEBUG - https://api-t1.fyers.in:443 "GET /api/v3/profile HTTP/11" 200 None
+2024-12-24 12:01:03,611 - INFO - Client ID: DL00155, Name: LUCKY KUSHWAHA Connected!
+2024-12-24 12:01:03,633 - INFO - Starting Algo...
+2024-12-24 12:01:03,633 - INFO - Going to fetch instruments from server...
+2024-12-24 12:01:03,740 - DEBUG - https://api.kite.trade:443 "GET /instruments/NSE HTTP/11" 200 126877
+2024-12-24 12:01:03,883 - DEBUG - https://api.kite.trade:443 "GET /instruments/NFO HTTP/11" 200 518780
+2024-12-24 12:01:04,519 - INFO - Fetched 45944 instruments from server.
+2024-12-24 12:01:04,533 - INFO - Testing Instruments Mapping
+2024-12-24 12:01:04,533 - INFO - NIFTY 50 -> 256265
+2024-12-24 12:01:04,533 - INFO - 256265 -> NIFTY 50
+2024-12-24 12:01:04,537 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 12:01:04,787 - DEBUG - https://api-t1.fyers.in:443 "GET /data/history?symbol=NSE%3ANIFTY50-INDEX&resolution=1D&date_format=1&range_from=2024-11-04&range_to=2024-12-23&cont_flag=1&oi_flag=1 HTTP/11" 200 688
+2024-12-24 12:01:04,851 - INFO - Calculated ATR: 309.53885193693077
+2024-12-24 12:01:04,851 - INFO - ZerodhaTicker: Going to connect..
+2024-12-24 12:01:04,852 - INFO - Short Straddle in NIFTY starting...
+2024-12-24 12:01:04,852 - INFO - State loaded successfully.
+2024-12-24 12:01:05,072 - INFO - Ticker connection successful.
+2024-12-24 12:01:09,858 - INFO - Starting Parallel Target and SL Phase
+2024-12-24 12:01:09,860 - INFO - Starting Target Chasing Phase...
+2024-12-24 12:01:09,860 - INFO - Waiting for Either SL order to hit...
+2024-12-24 12:01:09,861 - INFO - Chasing Target Points: 46.43082779053962
+2024-12-24 12:01:09,873 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850CE token = 10672386
+2024-12-24 12:01:09,885 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850PE token = 10672642
+2024-12-24 12:01:09,898 - INFO - ZerodhaTicker Subscribing tokens [10672386, 10672642]
+2024-12-24 12:01:10,186 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.75}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.35}]
+2024-12-24 12:01:10,500 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.9}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.35}]
+2024-12-24 12:01:10,794 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.1}]
+2024-12-24 12:01:11,094 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.8}]
+2024-12-24 12:01:11,714 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.5}]
+2024-12-24 12:01:12,003 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.75}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.7}]
+2024-12-24 12:01:12,284 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.7}]
+2024-12-24 12:01:12,591 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.7}]
+2024-12-24 12:01:12,879 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.6}]
+2024-12-24 12:01:13,193 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.9}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.6}]
+2024-12-24 12:01:13,500 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.75}]
+2024-12-24 12:01:13,788 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.4}]
+2024-12-24 12:01:14,082 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.0}]
+2024-12-24 12:01:14,455 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.1}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.45}]
+2024-12-24 12:01:14,673 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.2}]
+2024-12-24 12:01:14,980 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 83.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.5}]
+2024-12-24 12:01:15,280 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.45}]
+2024-12-24 12:01:15,844 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 83.2}]
+2024-12-24 12:01:15,901 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 83.0}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.2}]
+2024-12-24 12:01:16,195 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.75}]
+2024-12-24 12:01:16,859 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.7}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.6}]
+2024-12-24 12:01:17,411 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.1}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.5}]
+2024-12-24 12:01:18,036 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.55}]
+2024-12-24 12:01:18,343 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.6}]
+2024-12-24 12:01:18,931 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.6}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.8}]
+2024-12-24 12:01:19,489 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.95}]
+2024-12-24 12:01:19,796 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.9}]
+2024-12-24 12:01:20,103 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.0}]
+2024-12-24 12:01:20,579 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.2}]
+2024-12-24 12:01:20,685 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.05}]
+2024-12-24 12:01:20,992 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.95}]
+2024-12-24 12:01:21,293 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.05}]
+2024-12-24 12:01:21,594 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.15}]
+2024-12-24 12:01:21,907 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.55}]
+2024-12-24 12:01:22,195 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.6}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.5}]
+2024-12-24 12:01:22,502 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.6}]
+2024-12-24 12:01:23,089 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.6}]
+2024-12-24 12:01:23,403 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.85}]
+2024-12-24 12:01:23,847 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.5}]
+2024-12-24 12:01:23,985 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.55}]
+2024-12-24 12:01:24,280 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.75}]
+2024-12-24 12:01:24,599 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.3}]
+2024-12-24 12:01:24,888 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.05}]
+2024-12-24 12:01:25,200 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.9}]
+2024-12-24 12:01:25,557 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.7}]
+2024-12-24 12:01:26,094 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.45}]
+2024-12-24 12:01:26,413 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.2}]
+2024-12-24 12:01:27,021 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.35}]
+2024-12-24 12:01:27,290 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.05}]
+2024-12-24 12:01:27,891 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.0}]
+2024-12-24 12:01:28,211 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.15}]
+2024-12-24 12:01:28,804 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.0}]
+2024-12-24 12:01:29,098 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.7}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.6}]
+2024-12-24 12:01:29,423 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 83.0}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.55}]
+2024-12-24 12:01:30,071 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 83.0}]
+2024-12-24 12:01:30,296 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.25}]
+2024-12-24 12:01:30,633 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.75}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.2}]
+2024-12-24 12:01:31,196 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.4}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.25}]
+2024-12-24 12:01:31,496 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.7}]
+2024-12-24 12:01:31,804 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.8}]
+2024-12-24 12:01:32,098 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.7}]
+2024-12-24 12:01:32,399 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.7}]
+2024-12-24 12:01:32,693 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.8}]
+2024-12-24 12:01:32,994 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.8}]
+2024-12-24 12:01:33,289 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.7}]
+2024-12-24 12:01:33,614 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.95}]
+2024-12-24 12:01:33,902 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.85}]
+2024-12-24 12:01:34,490 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.05}]
+2024-12-24 12:01:34,897 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.75}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.45}]
+2024-12-24 12:01:35,091 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.85}]
+2024-12-24 12:01:35,385 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.7}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.8}]
+2024-12-24 12:01:35,711 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.15}]
+2024-12-24 12:01:35,993 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.55}]
+2024-12-24 12:01:36,613 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.45}]
+2024-12-24 12:01:37,070 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.6}]
+2024-12-24 12:01:37,214 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.6}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 73.8}]
+2024-12-24 12:01:37,496 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 80.55}]
+2024-12-24 12:01:38,085 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.9}]
+2024-12-24 12:01:38,572 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.9}]
+2024-12-24 12:01:38,690 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.55}]
+2024-12-24 12:01:39,217 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.7}]
+2024-12-24 12:01:39,298 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.6}]
+2024-12-24 12:01:39,837 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.4}]
+2024-12-24 12:01:39,887 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.4}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.15}]
+2024-12-24 12:01:40,507 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.45}]
+2024-12-24 12:01:40,814 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.05}]
+2024-12-24 12:01:41,140 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.65}]
+2024-12-24 12:01:41,385 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.2}]
+2024-12-24 12:01:41,992 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.25}]
+2024-12-24 12:01:42,306 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.45}]
+2024-12-24 12:01:42,600 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.05}]
+2024-12-24 12:01:42,919 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.2}]
+2024-12-24 12:01:43,201 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.15}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.1}]
+2024-12-24 12:01:43,844 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.05}]
+2024-12-24 12:01:44,091 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.9}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.6}]
+2024-12-24 12:01:44,448 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.45}]
+2024-12-24 12:01:44,705 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.8}]
+2024-12-24 12:01:44,999 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.6}]
+2024-12-24 12:01:45,299 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.45}]
+2024-12-24 12:01:45,613 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.65}]
+2024-12-24 12:01:45,900 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.4}]
+2024-12-24 12:01:46,792 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.05}]
+2024-12-24 12:01:47,212 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.2}]
+2024-12-24 12:01:47,394 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.45}]
+2024-12-24 12:01:47,707 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.1}]
+2024-12-24 12:01:48,131 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.2}]
+2024-12-24 12:01:48,300 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.25}]
+2024-12-24 12:01:48,895 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.25}]
+2024-12-24 12:01:49,196 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.3}]
+2024-12-24 12:01:49,678 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.1}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.4}]
+2024-12-24 12:01:49,798 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.3}]
+2024-12-24 12:01:50,292 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.4}]
+2024-12-24 12:01:50,900 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 81.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.3}]
+2024-12-24 12:01:51,000 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.1}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.3}]
+2024-12-24 12:01:51,294 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.05}]
+2024-12-24 12:01:51,601 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.35}]
+2024-12-24 12:01:51,899 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.0}]
+2024-12-24 12:01:52,194 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.2}]
+2024-12-24 12:01:52,494 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.35}]
+2024-12-24 12:01:52,801 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.2}]
+2024-12-24 12:01:53,163 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.55}]
+2024-12-24 12:01:53,400 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.35}]
+2024-12-24 12:01:53,698 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.8}]
+2024-12-24 12:01:54,015 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.85}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.2}]
+2024-12-24 12:01:54,284 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.25}]
+2024-12-24 12:01:55,198 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.3}]
+2024-12-24 12:01:55,230 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.75}]
+2024-12-24 12:01:55,480 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.65}]
+2024-12-24 12:01:55,793 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.3}]
+2024-12-24 12:01:56,106 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.3}]
+2024-12-24 12:01:56,425 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.35}]
+2024-12-24 12:01:56,688 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.45}]
+2024-12-24 12:01:57,340 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.85}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.25}]
+2024-12-24 12:01:57,947 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.6}]
+2024-12-24 12:01:57,960 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.9}]
+2024-12-24 12:01:58,185 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.35}]
+2024-12-24 12:01:58,480 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.6}]
+2024-12-24 12:01:59,100 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.45}]
+2024-12-24 12:01:59,495 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 72.1}]
+2024-12-24 12:01:59,983 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.9}]
+2024-12-24 12:02:00,328 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 82.15}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.75}]
+2024-12-24 12:02:00,591 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 71.8}]
+2024-12-24 12:02:00,916 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 83.15}]
+2024-12-24 12:02:01,185 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 70.75}]
+2024-12-24 12:02:01,803 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 70.1}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 83.95}]
+2024-12-24 12:02:02,110 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.0}]
+2024-12-24 12:02:02,399 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.3}]
+2024-12-24 12:02:02,687 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.95}]
+2024-12-24 12:02:03,294 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.65}]
+2024-12-24 12:02:03,595 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.0}]
+2024-12-24 12:02:03,889 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.4}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.35}]
+2024-12-24 12:02:04,539 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.9}]
+2024-12-24 12:02:04,796 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.7}]
+2024-12-24 12:02:05,335 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.5}]
+2024-12-24 12:02:05,385 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.45}]
+2024-12-24 12:02:05,692 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.55}]
+2024-12-24 12:02:06,005 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.7}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.95}]
+2024-12-24 12:02:06,292 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.55}]
+2024-12-24 12:02:06,868 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.0}]
+2024-12-24 12:02:06,931 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.95}]
+2024-12-24 12:02:07,193 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:07,795 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.05}]
+2024-12-24 12:02:08,102 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.3}]
+2024-12-24 12:02:08,402 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.9}]
+2024-12-24 12:02:08,716 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.2}]
+2024-12-24 12:02:09,313 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 89.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 66.35}]
+2024-12-24 12:02:09,933 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.1}]
+2024-12-24 12:02:10,196 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.65}]
+2024-12-24 12:02:10,795 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.1}]
+2024-12-24 12:02:11,095 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.8}]
+2024-12-24 12:02:11,690 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.65}]
+2024-12-24 12:02:12,016 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.45}]
+2024-12-24 12:02:12,309 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.35}]
+2024-12-24 12:02:12,910 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.8}]
+2024-12-24 12:02:13,192 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.85}]
+2024-12-24 12:02:13,499 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.5}]
+2024-12-24 12:02:13,862 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.35}]
+2024-12-24 12:02:14,087 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.2}]
+2024-12-24 12:02:14,695 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 66.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.8}]
+2024-12-24 12:02:15,302 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 89.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 66.3}]
+2024-12-24 12:02:15,609 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 89.15}]
+2024-12-24 12:02:15,880 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 89.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 66.45}]
+2024-12-24 12:02:16,494 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 89.15}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 66.6}]
+2024-12-24 12:02:17,096 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.5}]
+2024-12-24 12:02:17,396 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 66.9}]
+2024-12-24 12:02:17,703 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.0}]
+2024-12-24 12:02:18,079 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.95}]
+2024-12-24 12:02:18,292 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.5}]
+2024-12-24 12:02:18,894 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.3}]
+2024-12-24 12:02:19,201 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.9}]
+2024-12-24 12:02:19,701 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.15}]
+2024-12-24 12:02:19,796 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.0}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.65}]
+2024-12-24 12:02:20,397 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.4}]
+2024-12-24 12:02:20,410 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.15}]
+2024-12-24 12:02:20,997 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.25}]
+2024-12-24 12:02:21,286 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.2}]
+2024-12-24 12:02:21,624 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.15}]
+2024-12-24 12:02:21,887 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.95}]
+2024-12-24 12:02:22,188 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.25}]
+2024-12-24 12:02:22,807 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.65}]
+2024-12-24 12:02:23,113 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.9}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.2}]
+2024-12-24 12:02:23,714 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 88.45}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.4}]
+2024-12-24 12:02:24,002 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.9}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.6}]
+2024-12-24 12:02:24,289 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.75}]
+2024-12-24 12:02:24,691 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.9}]
+2024-12-24 12:02:24,891 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.8}]
+2024-12-24 12:02:25,186 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.55}]
+2024-12-24 12:02:25,499 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.6}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.2}]
+2024-12-24 12:02:26,106 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.75}]
+2024-12-24 12:02:26,388 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.3}]
+2024-12-24 12:02:26,695 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.4}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.85}]
+2024-12-24 12:02:27,002 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.95}]
+2024-12-24 12:02:27,290 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.05}]
+2024-12-24 12:02:27,597 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.6}]
+2024-12-24 12:02:28,078 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.45}]
+2024-12-24 12:02:28,178 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.45}]
+2024-12-24 12:02:28,792 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.5}]
+2024-12-24 12:02:29,299 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.4}]
+2024-12-24 12:02:29,387 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.95}]
+2024-12-24 12:02:29,781 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.35}]
+2024-12-24 12:02:30,462 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.15}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.75}]
+2024-12-24 12:02:30,593 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.75}]
+2024-12-24 12:02:30,892 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.65}]
+2024-12-24 12:02:31,443 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.6}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.9}]
+2024-12-24 12:02:31,512 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.9}]
+2024-12-24 12:02:31,801 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.5}]
+2024-12-24 12:02:32,113 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.0}]
+2024-12-24 12:02:32,388 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.0}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.8}]
+2024-12-24 12:02:33,002 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.25}]
+2024-12-24 12:02:33,284 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.05}]
+2024-12-24 12:02:33,591 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.0}]
+2024-12-24 12:02:33,923 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.95}]
+2024-12-24 12:02:34,199 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.05}]
+2024-12-24 12:02:34,844 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.85}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.05}]
+2024-12-24 12:02:35,113 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:35,439 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.15}]
+2024-12-24 12:02:35,751 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.5}]
+2024-12-24 12:02:35,996 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.35}]
+2024-12-24 12:02:36,365 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.25}]
+2024-12-24 12:02:36,598 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.3}]
+2024-12-24 12:02:36,989 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.15}]
+2024-12-24 12:02:37,202 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.6}]
+2024-12-24 12:02:37,502 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.45}]
+2024-12-24 12:02:38,091 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.85}]
+2024-12-24 12:02:38,517 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.25}]
+2024-12-24 12:02:38,699 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.15}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.35}]
+2024-12-24 12:02:39,129 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.85}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.5}]
+2024-12-24 12:02:39,286 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.1}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.2}]
+2024-12-24 12:02:39,898 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.3}]
+2024-12-24 12:02:40,192 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.95}]
+2024-12-24 12:02:40,493 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.15}]
+2024-12-24 12:02:40,806 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.65}]
+2024-12-24 12:02:41,282 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.35}]
+2024-12-24 12:02:41,388 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.35}]
+2024-12-24 12:02:41,694 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.4}]
+2024-12-24 12:02:42,007 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.45}]
+2024-12-24 12:02:42,293 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.25}]
+2024-12-24 12:02:42,907 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.2}]
+2024-12-24 12:02:43,207 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.45}]
+2024-12-24 12:02:43,532 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.4}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.55}]
+2024-12-24 12:02:44,406 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.7}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.75}]
+2024-12-24 12:02:44,694 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.5}]
+2024-12-24 12:02:44,986 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.1}]
+2024-12-24 12:02:45,575 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.3}]
+2024-12-24 12:02:45,620 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.45}]
+2024-12-24 12:02:46,808 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.85}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.6}]
+2024-12-24 12:02:46,845 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.0}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.55}]
+2024-12-24 12:02:47,102 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.7}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.8}]
+2024-12-24 12:02:47,402 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.65}]
+2024-12-24 12:02:47,728 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.95}]
+2024-12-24 12:02:48,050 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.85}]
+2024-12-24 12:02:48,343 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.7}]
+2024-12-24 12:02:48,955 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.0}]
+2024-12-24 12:02:48,999 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.3}]
+2024-12-24 12:02:49,206 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.15}]
+2024-12-24 12:02:49,568 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.3}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.0}]
+2024-12-24 12:02:49,806 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:50,119 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:50,400 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:50,802 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.0}]
+2024-12-24 12:02:51,002 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.65}]
+2024-12-24 12:02:51,420 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.45}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.4}]
+2024-12-24 12:02:51,596 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.8}]
+2024-12-24 12:02:51,890 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.15}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 70.0}]
+2024-12-24 12:02:52,195 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.15}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.85}]
+2024-12-24 12:02:52,501 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.7}]
+2024-12-24 12:02:52,788 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.0}]
+2024-12-24 12:02:53,106 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.3}]
+2024-12-24 12:02:53,394 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.5}]
+2024-12-24 12:02:53,713 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.65}]
+2024-12-24 12:02:54,006 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:54,292 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:54,593 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 84.95}]
+2024-12-24 12:02:54,895 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.2}]
+2024-12-24 12:02:55,194 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.05}]
+2024-12-24 12:02:55,508 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.15}]
+2024-12-24 12:02:56,025 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 69.1}]
+2024-12-24 12:02:56,094 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.95}]
+2024-12-24 12:02:56,453 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.8}]
+2024-12-24 12:02:56,701 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.6}]
+2024-12-24 12:02:57,007 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.75}]
+2024-12-24 12:02:57,559 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.05}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.65}]
+2024-12-24 12:02:58,207 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.75}]
+2024-12-24 12:02:58,494 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.65}]
+2024-12-24 12:02:59,096 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.35}]
+2024-12-24 12:02:59,391 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.8}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.6}]
+2024-12-24 12:02:59,710 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.45}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.9}]
+2024-12-24 12:03:00,637 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.7}]
+2024-12-24 12:03:00,900 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.6}]
+2024-12-24 12:03:01,526 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.0}]
+2024-12-24 12:03:01,792 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.35}]
+2024-12-24 12:03:02,099 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.85}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.65}]
+2024-12-24 12:03:02,413 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.7}]
+2024-12-24 12:03:03,001 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.55}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.85}]
+2024-12-24 12:03:03,608 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 85.85}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.7}]
+2024-12-24 12:03:04,190 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.3}]
+2024-12-24 12:03:04,497 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.65}]
+2024-12-24 12:03:04,817 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.7}]
+2024-12-24 12:03:05,237 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.8}]
+2024-12-24 12:03:05,392 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.85}]
+2024-12-24 12:03:06,012 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.9}]
+2024-12-24 12:03:06,588 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.3}]
+2024-12-24 12:03:07,046 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.7}]
+2024-12-24 12:03:07,190 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.0}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.85}]
+2024-12-24 12:03:07,497 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.05}]
+2024-12-24 12:03:08,092 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.5}]
+2024-12-24 12:03:08,617 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.65}]
+2024-12-24 12:03:08,692 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.4}]
+2024-12-24 12:03:08,991 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.5}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.3}]
+2024-12-24 12:03:09,611 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.6}]
+2024-12-24 12:03:09,912 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.9}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.1}]
+2024-12-24 12:03:10,500 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.6}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.3}]
+2024-12-24 12:03:11,101 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.2}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.45}]
+2024-12-24 12:03:11,395 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.45}]
+2024-12-24 12:03:11,713 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.15}]
+2024-12-24 12:03:12,312 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.0}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.7}]
+2024-12-24 12:03:13,192 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.25}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.5}]
+2024-12-24 12:03:13,499 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.1}]
+2024-12-24 12:03:13,786 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 87.35}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.5}]
+2024-12-24 12:03:14,106 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.5}]
+2024-12-24 12:03:14,455 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.95}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.75}]
+2024-12-24 12:03:14,480 - INFO - KeyboardInterrupt detected. Saving state before exiting...
+2024-12-24 12:03:14,524 - INFO - State saved successfully.
+2024-12-24 12:03:14,537 - INFO - State saved successfully. Exiting...
+2024-12-24 12:03:14,693 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.45}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.1}]
+2024-12-24 12:03:14,993 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.0}]
+2024-12-24 12:03:15,376 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.4}]
+2024-12-24 12:03:15,588 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.7}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 68.0}]
+2024-12-24 12:03:16,314 - INFO - [{'tradable': True, 'mode': 'ltp', 'instrument_token': 10672642, 'last_price': 86.65}, {'tradable': True, 'mode': 'ltp', 'instrument_token': 10672386, 'last_price': 67.8}]
+2024-12-24 12:03:20,265 - INFO - handle_broker_login function called
+2024-12-24 12:03:20,266 - INFO - loaded broker data of: Zerodha
+2024-12-24 12:03:20,266 - INFO - loaded broker data of: Fyers
+2024-12-24 12:03:20,266 - INFO - Zerodha Login is being used
+2024-12-24 12:03:20,268 - DEBUG - Starting new HTTPS connection (1): api.kite.trade:443
+2024-12-24 12:03:20,571 - DEBUG - https://api.kite.trade:443 "GET /user/profile HTTP/11" 200 None
+2024-12-24 12:03:20,572 - INFO - User ID: BI3034, Lucky Kushwaha Connected!
+2024-12-24 12:03:20,576 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 12:03:20,914 - DEBUG - https://api-t1.fyers.in:443 "GET /api/v3/profile HTTP/11" 200 None
+2024-12-24 12:03:20,920 - INFO - Client ID: DL00155, Name: LUCKY KUSHWAHA Connected!
+2024-12-24 12:03:20,942 - INFO - Starting Algo...
+2024-12-24 12:03:20,942 - INFO - Going to fetch instruments from server...
+2024-12-24 12:03:21,030 - DEBUG - https://api.kite.trade:443 "GET /instruments/NSE HTTP/11" 200 126877
+2024-12-24 12:03:21,189 - DEBUG - https://api.kite.trade:443 "GET /instruments/NFO HTTP/11" 200 518780
+2024-12-24 12:03:21,882 - INFO - Fetched 45944 instruments from server.
+2024-12-24 12:03:21,897 - INFO - Testing Instruments Mapping
+2024-12-24 12:03:21,897 - INFO - NIFTY 50 -> 256265
+2024-12-24 12:03:21,897 - INFO - 256265 -> NIFTY 50
+2024-12-24 12:03:21,899 - DEBUG - Starting new HTTPS connection (1): api-t1.fyers.in:443
+2024-12-24 12:03:22,129 - DEBUG - https://api-t1.fyers.in:443 "GET /data/history?symbol=NSE%3ANIFTY50-INDEX&resolution=1D&date_format=1&range_from=2024-11-04&range_to=2024-12-23&cont_flag=1&oi_flag=1 HTTP/11" 200 688
+2024-12-24 12:03:22,186 - INFO - Calculated ATR: 309.53885193693077
+2024-12-24 12:03:22,186 - INFO - ZerodhaTicker: Going to connect..
+2024-12-24 12:03:22,187 - INFO - Short Straddle in NIFTY starting...
+2024-12-24 12:03:22,188 - INFO - State loaded successfully.
+2024-12-24 12:03:22,590 - INFO - Ticker connection successful.
+2024-12-24 12:03:27,193 - INFO - Starting Parallel Target and SL Phase
+2024-12-24 12:03:27,195 - INFO - Starting Target Chasing Phase...
+2024-12-24 12:03:27,195 - INFO - Waiting for Either SL order to hit...
+2024-12-24 12:03:27,195 - INFO - Chasing Target Points: 46.43082779053962
+2024-12-24 12:03:27,214 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850CE token = 10672386
+2024-12-24 12:03:27,221 - INFO - ZerodhaTicker registerSymbol: NIFTY24DEC23850PE token = 10672642
+2024-12-24 12:03:27,227 - INFO - ZerodhaTicker Subscribing tokens [10672386, 10672642]
+2024-12-24 12:15:45,736 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607245', 'exchange_order_id': '1300000046328749', 'parent_order_id': None, 'status': 'OPEN', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 12:15:45', 'exchange_update_timestamp': '2024-12-24 12:15:45', 'exchange_timestamp': '2024-12-24 12:15:45', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850PE', 'instrument_token': 10672642, 'order_type': 'LIMIT', 'transaction_type': 'BUY', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 113.55, 'trigger_price': 108.55, 'average_price': 0, 'filled_quantity': 0, 'pending_quantity': 25, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032X40IYlsJ6dUgD'}
+2024-12-24 12:15:45,757 - INFO - Waiting for order to update
+2024-12-24 12:15:45,782 - INFO - Order updated successfully.
+2024-12-24 12:15:45,820 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607245', 'exchange_order_id': '1300000046328749', 'parent_order_id': None, 'status': 'COMPLETE', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 12:15:45', 'exchange_update_timestamp': '2024-12-24 12:15:45', 'exchange_timestamp': '2024-12-24 12:15:45', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850PE', 'instrument_token': 10672642, 'order_type': 'LIMIT', 'transaction_type': 'BUY', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 113.55, 'trigger_price': 108.55, 'average_price': 108.95, 'filled_quantity': 25, 'pending_quantity': 0, 'cancelled_quantity': 0, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032X40IYlsJ6dUgD'}
+2024-12-24 12:15:45,845 - INFO - Waiting for order to update
+2024-12-24 12:15:45,870 - INFO - Order updated successfully.
+2024-12-24 12:15:45,877 - INFO - PE SL Hit!
+2024-12-24 12:15:45,896 - INFO - Going to cancel order 241224200607241
+2024-12-24 12:15:45,952 - DEBUG - Resetting dropped connection: api.kite.trade
+2024-12-24 12:15:46,384 - DEBUG - https://api.kite.trade:443 "DELETE /orders/regular/241224200607241 HTTP/11" 200 None
+2024-12-24 12:15:46,391 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607241', 'exchange_order_id': '1300000046327596', 'parent_order_id': None, 'status': 'CANCELLED', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 12:15:46', 'exchange_update_timestamp': '2024-12-24 12:15:46', 'exchange_timestamp': '2024-12-24 10:45:55', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850CE', 'instrument_token': 10672386, 'order_type': 'SL', 'transaction_type': 'BUY', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 111.25, 'trigger_price': 106.25, 'average_price': 0, 'filled_quantity': 0, 'pending_quantity': 0, 'cancelled_quantity': 25, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032XRWWoi554jmDD'}
+2024-12-24 12:15:46,398 - INFO - Waiting for order to update
+2024-12-24 12:15:46,404 - INFO - Order cancelled successfully, order_id = 241224200607241
+2024-12-24 12:15:46,405 - INFO - Order updated successfully.
+2024-12-24 12:15:46,417 - INFO - Since SL is Hit!, Unregistering Symbols
+2024-12-24 12:15:46,417 - INFO - order update: {'account_id': 'BI3034', 'unfilled_quantity': 0, 'checksum': '', 'placed_by': 'BI3034', 'order_id': '241224200607241', 'exchange_order_id': '1300000046327596', 'parent_order_id': None, 'status': 'CANCELLED', 'status_message': None, 'status_message_raw': None, 'order_timestamp': '2024-12-24 12:15:46', 'exchange_update_timestamp': '2024-12-24 12:15:46', 'exchange_timestamp': '2024-12-24 10:45:55', 'variety': 'regular', 'exchange': 'NFO', 'tradingsymbol': 'NIFTY24DEC23850CE', 'instrument_token': 10672386, 'order_type': 'SL', 'transaction_type': 'BUY', 'validity': 'DAY', 'product': 'MIS', 'quantity': 25, 'disclosed_quantity': 0, 'price': 111.25, 'trigger_price': 106.25, 'average_price': 0, 'filled_quantity': 0, 'pending_quantity': 25, 'cancelled_quantity': 25, 'market_protection': 0, 'meta': {}, 'tag': None, 'guid': '130032XRWWoi554jmDD'}
+2024-12-24 12:15:46,417 - INFO - ZerodhaTicker unregisterSymbol: NIFTY24DEC23850CE token = 10672386
+2024-12-24 12:15:46,417 - INFO - Waiting for order to update
+2024-12-24 12:15:46,418 - INFO - ZerodhaTicker unregisterSymbol: NIFTY24DEC23850PE token = 10672642
+2024-12-24 12:15:46,418 - INFO - Order updated successfully.
+2024-12-24 12:15:46,418 - INFO - ZerodhaTicker Unregistering tokens [10672386, 10672642]
+2024-12-24 12:15:46,419 - INFO - Setting target Order for running order phase...
+2024-12-24 12:15:46,419 - INFO - Going to place order with params: Order(trading_symbol=NIFTY24DEC23850CE, order_id=None, transaction_type=BUY, quantity=25, product=MIS, order_type=LIMIT, price=-71.7, order_place_timestamp=None)
+2024-12-24 12:15:46,495 - DEBUG - https://api.kite.trade:443 "POST /orders/regular HTTP/11" 400 89
+2024-12-24 12:15:46,496 - INFO - Order placement failed: Invalid `price`.
+2024-12-24 12:15:46,496 - INFO - Waiting for Target or SL to hit or Stop time Phase...
+2024-12-24 12:19:57,138 - INFO - KeyboardInterrupt detected. Saving state before exiting...
+2024-12-24 12:19:57,141 - INFO - State saved successfully.
+2024-12-24 12:19:57,141 - INFO - State saved successfully. Exiting...
