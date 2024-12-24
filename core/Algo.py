@@ -17,14 +17,14 @@ class Algo:
         Test.test_instrument_mapping()
 
         # Ticker testing
-        Test.test_ticker()
+        # Test.test_ticker()
 
         # order testing
         # Test.test_orders()
 
-        # straddle_params = NiftyShortStraddleParams()
-        # straddle_nifty = ShortStraddle(straddle_params)
-        # straddle_nifty.process()
+        straddle_params = NiftyShortStraddleParams()
+        straddle_nifty = ShortStraddle(straddle_params)
+        straddle_nifty.process()
 
         # Test Historical data API working
         # Test.test_historical_data()
