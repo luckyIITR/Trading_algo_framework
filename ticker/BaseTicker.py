@@ -16,6 +16,7 @@ class BaseTicker:
 
     def register_listeners(self, listener):
     # All registered tick listeners will be notified on new ticks
+        logging.info("Registering listeners")
         self.tick_listener.append(listener)
 
     def register_order_update_listener(self, listener):
@@ -29,11 +30,12 @@ class BaseTicker:
 
     def on_new_ticks(self, ticks):
         # logging.info('New ticks received %s', ticks)
-        for listener in self.tick_listener:
-            try:
-                listener(ticks)
-            except Exception as e:
-                logging.error('BaseTicker: Exception from listener callback function. Error => %s', str(e))
+        for tick in ticks:
+            for listener in self.tick_listener:
+                try:
+                    listener(tick)
+                except Exception as e:
+                    logging.error('BaseTicker: Exception from listener callback function. Error => %s', str(e))
 
     def _on_order_update(self, data):
         # logging.info(f'on_order_update : {data}')

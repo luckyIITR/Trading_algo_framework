@@ -7,3 +7,4 @@ class ShortStraddleState:
     PE_SL_HIT = "PE_SL_HIT"
     BOTH_SL_HIT = "BOTH_SL_HIT"
     COMPLETED = "COMPLETED"
+    STOP_TIME_REACHED = "STOP_TIME_REACHED"
