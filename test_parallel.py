@@ -1,6 +1,15 @@
 import threading
 import time
 
+def run_in_threads(*functions):
+    threads = []
+    for func in functions:
+        thread = threading.Thread(target=func, name=f"{func.__name__}_thread")
+        threads.append(thread)
+        thread.start()
+    for thread in threads:
+        thread.join()
+
 # Create a shared event for signaling
 stop_event = threading.Event()
 
@@ -20,16 +29,6 @@ def task2():
         time.sleep(0.5)  # Simulate continuous processing
     print("Task2: Interrupted by Task1.")
 
-# Create threads
-thread1 = threading.Thread(target=task1)
-thread2 = threading.Thread(target=task2)
-
-# Start threads
-thread1.start()
-thread2.start()
-
-# Wait for threads to complete
-thread1.join()
-thread2.join()
+run_in_threads(task1, task2)
 
 print("Both tasks are done.")

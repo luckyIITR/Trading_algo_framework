@@ -25,11 +25,12 @@ class Algo:
         Instruments.fetch_instruments_from_server()
         Test.test_instrument_mapping()
 
-        log_heading("Ticker Testing")
+        # log_heading("Ticker Testing")
 
         # Ticker testing
         # Test.test_ticker()
         # obj1 = TickerTest("This is one object of ticker")
+        # obj1.test_ticker()
         # obj2 = TickerTest("This is Second object of ticker")
         #
         # th1 = threading.Thread(target=obj1.test_ticker)

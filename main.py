@@ -7,7 +7,7 @@ logging.basicConfig(
     level=logging.DEBUG,  # Set the minimum level of messages to capture
     format="%(asctime)s - %(levelname)s - %(message)s",  # Format of log messages
     handlers=[
-        logging.FileHandler(f"logs/{datetime.datetime.now().date()}_logs_test.log", mode="a"),  # Log to a file named 'app.log'
+        logging.FileHandler(f"logs/{datetime.datetime.now().date()}_logs.log", mode="a"),  # Log to a file named 'app.log'
         logging.StreamHandler()         # Also log to the terminal
     ],
     force=True

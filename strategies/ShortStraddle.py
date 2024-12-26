@@ -15,6 +15,8 @@ import threading
 from strategies.StrategyState.ShortStraddleState import ShortStraddleState
 import pickle
 from instruments.Instruments import Instruments
+# Set a threshold for timeout in seconds
+TIMEOUT_THRESHOLD = 10  # e.g., 10 seconds
 
 LOG_WIDTH = 80
 def log_heading(msg):
@@ -48,6 +50,7 @@ class ShortStraddleTrade:
 
         self.ce_target_order = None
         self.pe_target_order = None
+        # self.single_target_order = None # Used when
 
         self.ce_square_off_order = None
         self.pe_square_off_order = None
@@ -94,8 +97,8 @@ class ShortStraddle(BaseStrategy):
         # Start ticker
         self.ticker = ZerodhaTicker()
         self.ticker.start_ticker()
-        # Register listners
-        self.ticker.register_order_update_listener(ShortStraddle.order_update_listner)
+        # Register listener
+        self.ticker.register_order_update_listener(self.order_update_listener)
 
         self.strategy_state = ShortStraddleState.STRADDLE_STARTED
         # Create a shared event for signaling
@@ -103,11 +106,14 @@ class ShortStraddle(BaseStrategy):
         self.target_achieved = threading.Event()
         # Trade object
         self.trade = ShortStraddleTrade()
+        self.last_tick_time = time.time()
 
     def save_state(self, filepath=f"states_log_files/short_straddle_state_{datetime.datetime.now().date()}.pkl"):
         state = {"trade": self.trade,
+                 "strategy_state" : self.strategy_state,
                  "stop_event": True if self.stop_event.is_set() else False,
-                 "target_achieved": True if self.target_achieved.is_set() else False}
+                 "target_achieved": True if self.target_achieved.is_set() else False
+                 }
 
         with open(filepath, "wb") as f:
             pickle.dump(state, f)
@@ -118,6 +124,7 @@ class ShortStraddle(BaseStrategy):
             with open(filepath, "rb") as f:
                 state = pickle.load(f)
             self.trade = state["trade"]
+            self.strategy_state = state["strategy_state"]
             if state.get("stop_event"):
                 self.stop_event.set()
             if state.get("target_achieved"):
@@ -136,7 +143,7 @@ class ShortStraddle(BaseStrategy):
                 return True
         return False
 
-    def order_update_listner(self, data):
+    def order_update_listener(self, data):
         logging.info(f"order update: {data}")
         # Wait for key
         if not self.wait_for_key(data['order_id']):
@@ -161,10 +168,10 @@ class ShortStraddle(BaseStrategy):
 
     def process(self):
         try:
-            logging.info(f"Short Straddle in {self.instrument} starting...")
+            log_heading(f"Short Straddle in {self.instrument} starting...")
             # Load previous state if available
             self.load_state()
-            time.sleep(5)
+            time.sleep(1)
 
             if self.strategy_state == ShortStraddleState.STRADDLE_STARTED:
                 self._wait_for_pre_market()
@@ -177,11 +184,12 @@ class ShortStraddle(BaseStrategy):
             if self.strategy_state == ShortStraddleState.ENTRY_ORDER_PLACED:
                 # Place SL Order Stage
                 self.sl_order_placement_stage()
+                self.validate_sl_orders()
 
             if self.strategy_state == ShortStraddleState.SL_ORDER_PLACED:
                 log_heading("Starting Parallel Target and SL Phase")
                 # Run the chase_target_phase and wait_for_sl_to_hit in parallel
-                run_in_threads(self.chase_target_phase, self.wait_for_sl_to_hit)
+                run_in_threads(self.chase_target_phase, self.wait_for_sl_to_hit, self.monitor_ticks)
 
             # Check state and proceed
             if (self.strategy_state == ShortStraddleState.CE_SL_HIT) or (self.strategy_state == ShortStraddleState.PE_SL_HIT):
@@ -235,6 +243,16 @@ class ShortStraddle(BaseStrategy):
             self.trade.order_id_mapping[pe_order_id] = pe_order
             self.trade.pe_square_off_order = pe_order
 
+    def create_limit_order(self, symbol, side, price):
+        return Order(variety=KiteConstants.VARIETY_REGULAR,
+                      exchange=KiteConstants.EXCHANGE_NFO,
+                      trading_symbol=symbol,
+                      transaction_type=side,
+                      quantity=self.trade.quantity,
+                      product=KiteConstants.PRODUCT_MIS,
+                      order_type=KiteConstants.ORDER_TYPE_LIMIT,
+                      price=price,
+                      )
 
     def create_market_order(self, symbol, side):
         return Order(variety=KiteConstants.VARIETY_REGULAR,
@@ -288,49 +306,39 @@ class ShortStraddle(BaseStrategy):
         """
         log_heading("Setting target order for the running position")
         if self.strategy_state == ShortStraddleState.CE_SL_HIT:
-            trading_symbol = self.trade.pe_option_symbol
-            sl_price = self.trade.ce_sl_price
+            target_price = Utils.round_to_exchange_price(
+                max(0.05, self.trade.total_sold_points - self.trade.total_target_points - self.trade.ce_sl_price)
+            )
+            self.trade.pe_target_order = self.create_limit_order(self.trade.pe_option_symbol, KiteConstants.TRANSACTION_TYPE_BUY, target_price)
+            order_id =  self.order_manager.place_order(self.trade.pe_target_order)
+            self.trade.order_id_mapping[order_id] = self.trade.pe_target_order
         else:
-            trading_symbol = self.trade.ce_option_symbol
-            sl_price = self.trade.pe_sl_price
-        # Calculate the target price
-        target_price = Utils.round_to_exchange_price(
-            min(0.05, self.trade.total_sold_points - self.trade.total_target_points - sl_price)
-        )
-        # Create the target order
-        self.trade.single_target_order = Order(
-            variety=KiteConstants.VARIETY_REGULAR,
-            exchange=KiteConstants.EXCHANGE_NFO,
-            trading_symbol=trading_symbol,
-            transaction_type=KiteConstants.TRANSACTION_TYPE_BUY,
-            quantity=self.trade.quantity,
-            product=KiteConstants.PRODUCT_MIS,
-            order_type=KiteConstants.ORDER_TYPE_LIMIT,
-            price=target_price
-        )
-        # Place the target order and store the mapping
-        target_order_id = self.order_manager.place_order(self.trade.single_target_order)
-        self.trade.order_id_mapping[target_order_id] = self.trade.single_target_order
+            target_price = Utils.round_to_exchange_price(
+                max(0.05, self.trade.total_sold_points - self.trade.total_target_points - self.trade.pe_sl_price)
+            )
+            self.trade.ce_target_order = self.create_limit_order(self.trade.ce_option_symbol, KiteConstants.TRANSACTION_TYPE_BUY, target_price)
+            order_id = self.order_manager.place_order(self.trade.ce_target_order)
+            self.trade.order_id_mapping[order_id] = self.trade.ce_target_order
 
-    def create_target_market_orders(self, symbol):
-        return Order(variety=KiteConstants.VARIETY_REGULAR,
-                      exchange=KiteConstants.EXCHANGE_NFO,
-                      trading_symbol=symbol,
-                      transaction_type=KiteConstants.TRANSACTION_TYPE_BUY,
-                      quantity=self.trade.quantity,
-                      product=KiteConstants.PRODUCT_MIS,
-                      order_type=KiteConstants.ORDER_TYPE_MARKET
-                      )
+    def monitor_ticks(self):
+        """
+        Monitor function to check if ticks are being received within the timeout threshold.
+        """
+        logging.info("Monitor ticks started.")
+        while (not self.stop_event.is_set()) and (datetime.datetime.now() <= self.stop_datetime):
+            time.sleep(1)  # Check every second
+            if time.time() - self.last_tick_time > TIMEOUT_THRESHOLD:
+                logging.warning("No ticks received for a while!")
+        logging.info("Monitor ticks stopping.")
 
     def chase_target_phase(self):
         log_heading("Starting Target Chasing Phase...")
         # Keep your target orders ready.
-        ce_target_order = self.create_target_market_orders(self.trade.ce_option_symbol)
-        pe_target_order = self.create_target_market_orders(self.trade.pe_option_symbol)
-
+        ce_target_order = self.create_market_order(self.trade.ce_option_symbol, KiteConstants.TRANSACTION_TYPE_BUY)
+        pe_target_order = self.create_market_order(self.trade.pe_option_symbol, KiteConstants.TRANSACTION_TYPE_BUY)
 
         # Register callback function
-        self.ticker.register_listeners(ShortStraddle.target_check_callback)
+        self.ticker.register_listeners(self.target_check_callback)
         # Register symbols
         self.ticker.register_symbol([self.trade.ce_option_symbol, self.trade.pe_option_symbol])
 
@@ -358,7 +366,7 @@ class ShortStraddle(BaseStrategy):
     def target_check_callback(self, tick):
         # Update latest ticks
         self.trade.latest_ticks[tick['instrument_token']] = tick['last_price']
-
+        self.last_tick_time = time.time()
         ltp_sum = self.trade.latest_ticks[self.trade.ce_token] + self.trade.latest_ticks[self.trade.pe_token]
 
         if (self.trade.total_sold_points - ltp_sum) >= self.trade.total_target_points:
@@ -414,8 +422,8 @@ class ShortStraddle(BaseStrategy):
         # Change state to SL order placed
         self.strategy_state = ShortStraddleState.SL_ORDER_PLACED
 
-
-    def calculate_sl_prices(self, ce_price, pe_price, total_loss_points):
+    @staticmethod
+    def calculate_sl_prices(ce_price, pe_price, total_loss_points):
         """Calculate the SL prices for CE and PE options."""
         total_price = ce_price + pe_price
         ce_sl_points = ce_price / total_price * total_loss_points
@@ -444,8 +452,8 @@ class ShortStraddle(BaseStrategy):
         self.trade.ce_option_symbol, self.trade.pe_option_symbol = self.get_atm_options_symbols()
 
         # Calculate total loss points
-        total_loss_points = self.sl_atr_rule * self.atr_range
-        logging.info(f"Total Loss Points: {total_loss_points}")
+        self.trade.total_loss_points = self.sl_atr_rule * self.atr_range
+        logging.info(f"Total Loss Points: {self.trade.total_loss_points}")
 
         # calculate lot_size
         self.trade.lot_size = self.get_lot_size("NFO", self.trade.ce_option_symbol)
@@ -456,7 +464,7 @@ class ShortStraddle(BaseStrategy):
         logging.info(f"Quantity: {self.trade.quantity}")
 
         # Calculate Total Target Points
-        self.trade.total_target_points = self.rr * total_loss_points
+        self.trade.total_target_points = self.rr * self.trade.total_loss_points
         logging.info(f"Total Target Points: {self.trade.total_target_points}")
 
         self.trade.ce_token = Instruments.symbol_to_token_map[self.trade.ce_option_symbol]
@@ -464,8 +472,8 @@ class ShortStraddle(BaseStrategy):
         self.trade.latest_ticks[self.trade.ce_token] = 10000  # infinite
         self.trade.latest_ticks[self.trade.pe_token] = 10000  # infinite
 
-        self.trade.ce_entry_order = self.create_entry_order(self.trade.ce_option_symbol)
-        self.trade.pe_entry_order = self.create_entry_order(self.trade.pe_option_symbol)
+        self.trade.ce_entry_order = self.create_market_order(self.trade.ce_option_symbol, KiteConstants.TRANSACTION_TYPE_SELL)
+        self.trade.pe_entry_order = self.create_market_order(self.trade.pe_option_symbol, KiteConstants.TRANSACTION_TYPE_SELL)
 
     def entry_order_placement_stage(self):
         log_heading("Entry Order Placement Stage")
@@ -483,8 +491,9 @@ class ShortStraddle(BaseStrategy):
         self.trade.order_id_mapping[ce_order_id] = self.trade.ce_entry_order
         self.trade.order_id_mapping[pe_order_id] = self.trade.pe_entry_order
 
+    # noinspection PyUnresolvedReferences
     def validate_entry_orders(self):
-        logging.info("Validating Entry Orders...")
+        log_heading("Validating Entry Orders")
         logging.info("Waiting for orders to get updated...")
         # start timeout to get orders updated
         orders_updated = False
@@ -503,29 +512,20 @@ class ShortStraddle(BaseStrategy):
         # Change state to Entry Order Placed
         self.strategy_state = ShortStraddleState.ENTRY_ORDER_PLACED
 
-    def create_entry_order(self, option_symbol):
-        order = Order(variety=KiteConstants.VARIETY_REGULAR,
-                      exchange=KiteConstants.EXCHANGE_NFO,
-                      trading_symbol=option_symbol,
-                      transaction_type=KiteConstants.TRANSACTION_TYPE_SELL,
-                      quantity=self.trade.quantity,
-                      product=KiteConstants.PRODUCT_MIS,
-                      order_type=KiteConstants.ORDER_TYPE_MARKET,
-                      )
-        return order
-
-    @staticmethod
-    def create_order(exchange, trading_symbol, transaction_type, quantity, product, order_type, price=None, trigger_price=None):
-        order = Order(variety=KiteConstants.VARIETY_REGULAR,
-                      exchange=exchange,
-                      trading_symbol=trading_symbol,
-                      transaction_type=transaction_type,
-                      quantity=quantity,
-                      product=product,
-                      order_type=order_type,
-                      price=price,
-                      trigger_price=trigger_price)
-        return order
+    def validate_sl_orders(self):
+        log_heading("Validating Stop Loss Orders")
+        logging.info("Waiting for orders to get updated...")
+        # Start timeout to get orders updated
+        orders_updated = False
+        timeout = 120
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            if ((self.trade.ce_sl_order.order_status == OrderStatus.TRIGGER_PENDING) or (self.trade.ce_sl_order.order_status == OrderStatus.COMPLETE)) and ((self.trade.pe_sl_order.order_status == OrderStatus.TRIGGER_PENDING) or (self.trade.pe_sl_order.order_status == OrderStatus.COMPLETE)):
+                orders_updated = True
+                break
+        if not orders_updated:
+            raise ValueError("Stop Loss Order Validation Failed, orders not updated")
+        logging.info("Validation Successful")
 
     def get_atr_range(self):
         # get historic data and calculate atr
@@ -543,26 +543,30 @@ class ShortStraddle(BaseStrategy):
         return int(self.trade.lot_size * 1)
 
     def get_lot_size(self, exchange, ce_option_symbol):
-        data = self.broker_handler.instruments(exchange)
-        for instr in data:
-            if instr['tradingsymbol'] == ce_option_symbol:
-                return instr['lot_size']
-        return None
+        # data = self.broker_handler.instruments(exchange)
+        # for instr in data:
+        #     if instr['tradingsymbol'] == ce_option_symbol:
+        #         return instr['lot_size']
+        # return None
+        return 75
 
     def get_atm_options_symbols(self):
         # Now fetch Nifty Opening price, calculate strike price and create trade
         open_price = self.broker_handler.ohlc(self.spot_symbol)[self.spot_symbol]['last_price']
-        # get strike price and expiry_date
+        # # get strike price and expiry_date
+        # open_price = 23819
         atm_strike_price = Utils.nearest_strike_price(open_price, self.options_gap)
-        expiry_date = Utils.get_weekly_expiry(self.today_date, self.expiry_day)
-        # form symbols for both ce and pe
-        ce_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "CE", self.today_date,
-                                                       expiry_date, self.expiry_day)
-        pe_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "PE", self.today_date,
-                                                       expiry_date, self.expiry_day)
+        # expiry_date = Utils.get_weekly_expiry(self.today_date, self.expiry_day, self.expiry_rule)
+        # # form symbols for both ce and pe
+        # ce_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "CE", self.today_date,
+        #                                                expiry_date, self.expiry_day)
+        # pe_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "PE", self.today_date,
+        #                                                expiry_date, self.expiry_day)
+        ce_option_symbol = f"NIFTY25102{atm_strike_price}CE"
+        pe_option_symbol = f"NIFTY25102{atm_strike_price}PE"
 
-        logging.info(
-            f"{self.instrument} Open Price: {open_price}, ATM Strike Price: {atm_strike_price}, expiry date: {expiry_date}")
+        # logging.info(
+        #     f"{self.instrument} Open Price: {open_price}, ATM Strike Price: {atm_strike_price}, expiry date: {expiry_date}")
         logging.info(f"CE Option Symbol: {ce_option_symbol}, PE Option Symbol: {pe_option_symbol}")
         logging.info("Checking options symbol validity...")
         # get quotes just to check if options symbols are valid or not

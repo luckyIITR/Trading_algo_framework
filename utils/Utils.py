@@ -111,7 +111,7 @@ class Utils:
         return last_weekday_of_month
 
     @staticmethod
-    def get_weekly_expiry(date, weekday_name):
+    def get_weekly_expiry(date, weekday_name, expiry_rule):
         """
         Calculate the nearest date for the given day of the week.
         Adjusts to the prior day if the nearest date is a holiday.
@@ -139,6 +139,8 @@ class Utils:
         if days_ahead < 0:  # If target day already passed this week
             days_ahead += 7
         nearest_date = date + datetime.timedelta(days=days_ahead)
+        if expiry_rule == "next_nearest":
+            nearest_date += datetime.timedelta(days=7)
 
         # Check if the nearest date is a holiday, and adjust if necessary
         while nearest_date in Utils.holidays:
