@@ -25,6 +25,8 @@ class Algo:
         Instruments.fetch_instruments_from_server()
         Test.test_instrument_mapping()
 
+        # Test.test_symbol()
+
         # log_heading("Ticker Testing")
 
         # Ticker testing

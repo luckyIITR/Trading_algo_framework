@@ -50,7 +50,6 @@ class ShortStraddleTrade:
 
         self.ce_target_order = None
         self.pe_target_order = None
-        # self.single_target_order = None # Used when
 
         self.ce_square_off_order = None
         self.pe_square_off_order = None
@@ -202,7 +201,7 @@ class ShortStraddle(BaseStrategy):
                 self.auto_square_off()
 
             logging.info("Stopping Short Straddle.")
-            time.sleep(15)
+            time.sleep(10)
             self.save_state()
             self.ticker.stop_ticker()
         except KeyboardInterrupt:
@@ -540,33 +539,32 @@ class ShortStraddle(BaseStrategy):
         return float(atr_data.values[-1])
 
     def calculate_quantity(self):
-        return int(self.trade.lot_size * 1)
+        if self.trade.lot_size == 25:
+            return int(self.trade.lot_size * 3)
+        elif self.trade.lot_size == 75:
+            return int(self.trade.lot_size * 1)
 
     def get_lot_size(self, exchange, ce_option_symbol):
-        # data = self.broker_handler.instruments(exchange)
-        # for instr in data:
-        #     if instr['tradingsymbol'] == ce_option_symbol:
-        #         return instr['lot_size']
-        # return None
-        return 75
+        data = self.broker_handler.instruments(exchange)
+        for instr in data:
+            if instr['tradingsymbol'] == ce_option_symbol:
+                return instr['lot_size']
+        raise ValueError("Unable to get lot size")
 
     def get_atm_options_symbols(self):
         # Now fetch Nifty Opening price, calculate strike price and create trade
         open_price = self.broker_handler.ohlc(self.spot_symbol)[self.spot_symbol]['last_price']
         # # get strike price and expiry_date
-        # open_price = 23819
         atm_strike_price = Utils.nearest_strike_price(open_price, self.options_gap)
-        # expiry_date = Utils.get_weekly_expiry(self.today_date, self.expiry_day, self.expiry_rule)
+        expiry_date = Utils.get_weekly_expiry(self.today_date, self.expiry_day, self.expiry_rule)
         # # form symbols for both ce and pe
-        # ce_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "CE", self.today_date,
-        #                                                expiry_date, self.expiry_day)
-        # pe_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "PE", self.today_date,
-        #                                                expiry_date, self.expiry_day)
-        ce_option_symbol = f"NIFTY25102{atm_strike_price}CE"
-        pe_option_symbol = f"NIFTY25102{atm_strike_price}PE"
+        ce_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "CE", self.today_date,
+                                                       expiry_date, self.expiry_day)
+        pe_option_symbol = Utils.create_options_symbol("NFO", self.instrument, atm_strike_price, "PE", self.today_date,
+                                                       expiry_date, self.expiry_day)
 
-        # logging.info(
-        #     f"{self.instrument} Open Price: {open_price}, ATM Strike Price: {atm_strike_price}, expiry date: {expiry_date}")
+        logging.info(
+            f"{self.instrument} Open Price: {open_price}, ATM Strike Price: {atm_strike_price}, expiry date: {expiry_date}")
         logging.info(f"CE Option Symbol: {ce_option_symbol}, PE Option Symbol: {pe_option_symbol}")
         logging.info("Checking options symbol validity...")
         # get quotes just to check if options symbols are valid or not

@@ -44,7 +44,7 @@ class Utils:
             symbol = instrument + year + month + str(strike_price) + option_type.upper()
         else:
             year = str(expiry_date)[2:4]
-            month = str(expiry_date)[5:7]
+            month = str(expiry_date.month)
             if month == '10':
                 month = 'O'
             elif month == '11':

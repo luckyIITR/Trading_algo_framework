@@ -8,6 +8,7 @@ from ordermgmt.OrderModifyParams import OrderModifyParams
 from instruments.Instruments import Instruments
 from ticker.ZerodhaTicker import ZerodhaTicker
 import datetime
+from utils.Utils import Utils
 
 class Test:
     @staticmethod
@@ -52,6 +53,52 @@ class Test:
 
         symbol_2 = Instruments.get_token_to_symbol(token)
         logging.info(f"{token} -> {symbol_2}")
+
+    @staticmethod
+    def test_symbol():
+
+
+        spot_symbol = "NSE:NIFTY 50"
+        instrument = "NIFTY"
+        expiry_day = "Thursday"
+        today_date = datetime.datetime.now().date()
+        broker_handler = Controller.get_broker_login().get_broker_handle()
+        open_price = broker_handler.ohlc(spot_symbol)[spot_symbol]['last_price']
+        logging.info(f"Spot: {spot_symbol} -> Last Price: {open_price}")
+        # # get strike price and expiry_date
+        atm_strike_price = Utils.nearest_strike_price(open_price, 50)
+        logging.info(f"ATM Strike Price: {atm_strike_price}")
+
+        # Get expiry date
+        nearest_expiry = Utils.get_weekly_expiry(today_date, expiry_day, "nearest")
+        logging.info(f"Nearest Expiry: {nearest_expiry}")
+        ce_option_symbol = Utils.create_options_symbol("NFO", instrument, atm_strike_price, "CE", today_date,
+                                                       nearest_expiry, expiry_day)
+        pe_option_symbol = Utils.create_options_symbol("NFO", instrument, atm_strike_price, "PE", today_date,
+                                                       nearest_expiry, expiry_day)
+        logging.info(f"CE Option Symbol: {ce_option_symbol}")
+        logging.info(f"PE Option Symbol: {pe_option_symbol}")
+        lot_size = Test.get_lot_size(broker_handler, "NFO", ce_option_symbol)
+        logging.info(f"Lot Size: {lot_size}")
+
+        next_nearest_expiry = Utils.get_weekly_expiry(today_date, expiry_day, "next_nearest")
+        logging.info(f"Next Nearest Expiry: {next_nearest_expiry}")
+        ce_option_symbol = Utils.create_options_symbol("NFO", instrument, atm_strike_price, "CE", today_date,
+                                                       next_nearest_expiry, expiry_day)
+        pe_option_symbol = Utils.create_options_symbol("NFO", instrument, atm_strike_price, "PE", today_date,
+                                                       next_nearest_expiry, expiry_day)
+        logging.info(f"CE Option Symbol: {ce_option_symbol}")
+        logging.info(f"PE Option Symbol: {pe_option_symbol}")
+        lot_size = Test.get_lot_size(broker_handler, "NFO", ce_option_symbol)
+        logging.info(f"Lot Size: {lot_size}")
+
+    @staticmethod
+    def get_lot_size(broker_handler, exchange, ce_option_symbol):
+        data = broker_handler.instruments(exchange)
+        for instr in data:
+            if instr['tradingsymbol'] == ce_option_symbol:
+                return instr['lot_size']
+        raise ValueError("Unable to get lot size")
 
     @staticmethod
     def test_orders():
