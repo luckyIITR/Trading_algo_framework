@@ -37,7 +37,7 @@ class ZerodhaOrderManager(BaseOrderManager):
                 quantity=order_modify_params.new_qty if order_modify_params.new_qty > 0 else None,
                 price=order_modify_params.new_price if order_modify_params.new_price > 0 else None,
                 trigger_price=order_modify_params.new_trigger_price if order_modify_params.new_trigger_price > 0 else None,
-                order_type=order_modify_params.new_order_type if order_modify_params.new_order_type != None else None
+                order_type=order_modify_params.new_order_type if order_modify_params.new_order_type is not None else None
             )
             logging.info(f'Order modified successfully, order_id = {order_id}')
             order.set_last_order_update_timestamp(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))

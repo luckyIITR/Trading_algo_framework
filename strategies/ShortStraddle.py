@@ -2,6 +2,7 @@ import logging
 import time
 from datetime import timedelta
 from core.Controller import Controller
+from ordermgmt.OrderModifyParams import OrderModifyParams
 from strategies.BaseStrategy import BaseStrategy
 import datetime
 from utils.Utils import Utils
@@ -74,15 +75,15 @@ class ShortStraddle(BaseStrategy):
         self.day = datetime.datetime.now().strftime("%A")
 
         # Load Strategy Parameters
-        self.square_off_time = params.square_off_time
+        self.square_off_time = params.auto_exit_times[self.day]
         self.atr_window = params.atr_window
         self.instrument = params.instrument
         self.spot_symbol = params.spot_symbol
-        self.start_datetime = datetime.datetime.combine(self.today_date, params.start_time)
-        self.stop_datetime = datetime.datetime.combine(self.today_date, params.square_off_time)
+        self.start_datetime = datetime.datetime.combine(self.today_date, params.straddle_start_times[self.day])
+        self.stop_datetime = datetime.datetime.combine(self.today_date, params.auto_exit_times[self.day])
         self.expiry_rule = params.expiry_rules[self.day]
         self.sl_atr_rule = params.sl_atr_rule[self.day]
-        self.rr = params.rr
+        self.rr = params.rrs[self.day]
         self.pre_market_datetime = datetime.datetime.combine(self.today_date, params.pre_market_time)
         self.options_gap = params.options_gap
         self.expiry_day = params.expiry_day
@@ -159,11 +160,13 @@ class ShortStraddle(BaseStrategy):
         order.message = data['status_message']
         logging.info("Order updated successfully.")
 
-    def _wait_for_pre_market(self):
-        if datetime.datetime.now() < self.pre_market_datetime:
-            wait_time = Utils.get_epoch(self.pre_market_datetime) - Utils.get_epoch(datetime.datetime.now())
-            logging.info(f"Waiting for {wait_time} seconds to finish pre-market...")
-            time.sleep(wait_time+10)
+    def _wait_for_start_time(self):
+        if datetime.datetime.now() < self.start_time:
+            wait_time = Utils.get_epoch(self.start_time) - Utils.get_epoch(datetime.datetime.now())
+            if wait_time >= 50:
+                wait_time -= 20
+                logging.info(f"Waiting for {wait_time} seconds to reach Start time...")
+                time.sleep(wait_time)
 
     def process(self):
         try:
@@ -173,7 +176,7 @@ class ShortStraddle(BaseStrategy):
             time.sleep(1)
 
             if self.strategy_state == ShortStraddleState.STRADDLE_STARTED:
-                self._wait_for_pre_market()
+                self._wait_for_start_time()
 
                 # Entry Order Stage
                 self.prepare_entry_orders()
@@ -383,9 +386,19 @@ class ShortStraddle(BaseStrategy):
                 # if true meaning SL hit
                 if self.trade.ce_sl_order.order_status == OrderStatus.COMPLETE:
                     logging.info("CE SL Hit!")
+                    # Modify SL of PE
+                    order_modification_params = OrderModifyParams(
+                        Utils.round_to_exchange_price(self.trade.pe_entry_order.average_price + 10),
+                        Utils.round_to_exchange_price(self.trade.pe_entry_order.average_price))
+                    self.order_manager.modify_order(self.trade.pe_sl_order, order_modification_params)
                     self.strategy_state = ShortStraddleState.CE_SL_HIT
                 else :
                     logging.info("PE SL Hit!")
+                    # Modify SL of CE
+                    order_modification_params = OrderModifyParams(
+                        Utils.round_to_exchange_price(self.trade.ce_entry_order.average_price + 10),
+                        Utils.round_to_exchange_price(self.trade.ce_entry_order.average_price))
+                    self.order_manager.modify_order(self.trade.ce_sl_order, order_modification_params)
                     self.strategy_state = ShortStraddleState.PE_SL_HIT
                 self.stop_event.set()  # Signal other threads to stop
                 return
@@ -477,7 +490,7 @@ class ShortStraddle(BaseStrategy):
     def entry_order_placement_stage(self):
         log_heading("Entry Order Placement Stage")
 
-        logging.info("Waiting for market to open...")
+        logging.info("Waiting for Start time.")
         while datetime.datetime.now() <= self.start_datetime:
             continue
         #  Fire the orders and store in a dict

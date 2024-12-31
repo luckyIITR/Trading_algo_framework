@@ -93,4 +93,8 @@ async def fyers_callback(request: Request):
     }
     with open('config/fyers.json', 'w') as jsonfile:
         json.dump(config_data, jsonfile, indent=4)
+    with open('../Research/config/fyers.json', 'w') as jsonfile:
+        json.dump(config_data, jsonfile, indent=4)
+    with open('../fetch_options_data/config/fyers.json', 'w') as jsonfile:
+        json.dump(config_data, jsonfile, indent=4)
     return RedirectResponse("/login")
