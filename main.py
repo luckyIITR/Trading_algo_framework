@@ -1,6 +1,5 @@
 import logging
 import datetime
-from core.Controller import Controller
 from core.Algo import Algo
 
 # Configure logging
@@ -13,15 +12,5 @@ logging.basicConfig(
     ],
     force=True
 )
-LOG_WIDTH = 80
-def log_heading(msg):
-    logging.info("\n" +
-                 "###########################################".center(LOG_WIDTH) + "\n" +
-                 f"{msg}".center(LOG_WIDTH) + "\n" +
-                 "###########################################".center(LOG_WIDTH) + "\n"
-                 )
 
-
-log_heading("Starting Algo...")
-Controller.handle_broker_login()
 Algo.start_algo()

@@ -63,7 +63,7 @@ async def zerodha(request: Request):
     session = fyersModel.SessionModel(
         client_id=fyers_app_config['api_key'],
         secret_key=fyers_app_config['api_secret'],
-        redirect_uri="http://127.0.0.1:7000/login/fyers_callback",
+        redirect_uri="https://iamlucky.co.in/login/fyers_callback",
         response_type="code"
     )
     url = session.generate_authcode()
@@ -75,7 +75,7 @@ async def fyers_callback(request: Request):
     session = fyersModel.SessionModel(
         client_id=fyers_app_config['api_key'],
         secret_key=fyers_app_config['api_secret'],
-        redirect_uri="http://127.0.0.1:7000/login/fyers_callback",
+        redirect_uri="https://iamlucky.co.in/login/fyers_callback",
         response_type="code",
         grant_type="authorization_code"
     )
@@ -93,8 +93,8 @@ async def fyers_callback(request: Request):
     }
     with open('config/fyers.json', 'w') as jsonfile:
         json.dump(config_data, jsonfile, indent=4)
-    with open('../Research/config/fyers.json', 'w') as jsonfile:
-        json.dump(config_data, jsonfile, indent=4)
+    # with open('../Research/config/fyers.json', 'w') as jsonfile:
+    #     json.dump(config_data, jsonfile, indent=4)
     with open('../fetch_options_data/config/fyers.json', 'w') as jsonfile:
         json.dump(config_data, jsonfile, indent=4)
     return RedirectResponse("/login")

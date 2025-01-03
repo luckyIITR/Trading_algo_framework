@@ -16,6 +16,8 @@ import threading
 from strategies.StrategyState.ShortStraddleState import ShortStraddleState
 import pickle
 from instruments.Instruments import Instruments
+from utils.notification import send_notification
+
 # Set a threshold for timeout in seconds
 TIMEOUT_THRESHOLD = 10  # e.g., 10 seconds
 
@@ -80,6 +82,7 @@ class ShortStraddle(BaseStrategy):
         self.instrument = params.instrument
         self.spot_symbol = params.spot_symbol
         self.start_datetime = datetime.datetime.combine(self.today_date, params.straddle_start_times[self.day])
+        self.start_time = self.start_datetime
         self.stop_datetime = datetime.datetime.combine(self.today_date, params.auto_exit_times[self.day])
         self.expiry_rule = params.expiry_rules[self.day]
         self.sl_atr_rule = params.sl_atr_rule[self.day]
@@ -134,9 +137,8 @@ class ShortStraddle(BaseStrategy):
         except FileNotFoundError:
             logging.warning("State file not found. Starting fresh.")
 
-
     def wait_for_key(self, order_id, timeout=60):
-        logging.info("Waiting for an order to update")
+        logging.info("Waiting for an order dictionary to get update")
         start_time = time.time()
         while time.time() - start_time < timeout:
             if order_id in self.trade.order_id_mapping:
@@ -151,13 +153,26 @@ class ShortStraddle(BaseStrategy):
             return
 
         order = self.trade.order_id_mapping[data['order_id']]
-        order.order_status = data['status']
+        order.put_raw_data(data)
+
+        # If order is updating then just wait
+        while order.is_updating:
+            continue
+        order.is_updating = True  # lock critical section
+
+        # if status is complete just don't do anything
+        if order.order_status == OrderStatus.COMPLETE:
+            order.is_updating = False  # unlock it
+            return
+
         order.average_price = data['average_price']
         order.filled_qty = data['filled_quantity']
         order.pending_qty = data['pending_quantity']
         order.order_timestamp = data['order_timestamp']
         order.exchange_timestamp = data['exchange_timestamp']
         order.message = data['status_message']
+        order.order_status = data['status'] # keeping it last will make sure all other parameters are updated before changing the status
+        order.is_updating = False # unlock it
         logging.info("Order updated successfully.")
 
     def _wait_for_start_time(self):
@@ -190,6 +205,7 @@ class ShortStraddle(BaseStrategy):
 
             if self.strategy_state == ShortStraddleState.SL_ORDER_PLACED:
                 log_heading("Starting Parallel Target and SL Phase")
+                send_notification("Starting Parallel Target and SL Phase")
                 # Run the chase_target_phase and wait_for_sl_to_hit in parallel
                 run_in_threads(self.chase_target_phase, self.wait_for_sl_to_hit, self.monitor_ticks)
 
@@ -204,15 +220,18 @@ class ShortStraddle(BaseStrategy):
                 self.auto_square_off()
 
             logging.info("Stopping Short Straddle.")
+            send_notification("Stopping Short Straddle.")
             time.sleep(10)
             self.save_state()
             self.ticker.stop_ticker()
         except KeyboardInterrupt:
             logging.info("KeyboardInterrupt detected. Saving state before exiting...")
+            send_notification("KeyboardInterrupt detected. Saving state before exiting...")
             self.save_state()  # Save state before exiting
             logging.info("State saved successfully. Exiting...")
         except Exception as e:
             logging.error(f"Unexpected error occurred: {e}")
+            send_notification(f"Unexpected error occurred: {e}")
             self.save_state()  # Save state even for other exceptions
 
     def auto_square_off(self):
@@ -221,6 +240,7 @@ class ShortStraddle(BaseStrategy):
         # Single Position Open -> CE_SL_HIT, PE_SL_HIT
         # No position Open -> Both SL hit, or Target HIT
         log_heading("Auto Square Off Phase")
+        send_notification("Auto Square Off Phase")
         ce_order = self.create_market_order(self.trade.ce_option_symbol, KiteConstants.TRANSACTION_TYPE_BUY)
         pe_order = self.create_market_order(self.trade.pe_option_symbol, KiteConstants.TRANSACTION_TYPE_BUY)
 
@@ -272,6 +292,7 @@ class ShortStraddle(BaseStrategy):
         case: 3. State: PE SL HIT (CE trade running, with SL and Target) -> Cancel SL/Target of CE, and square off CE
         """
         log_heading("Waiting for SL or Target To hit")
+        send_notification("Waiting for SL or Target To hit")
         if self.strategy_state == ShortStraddleState.CE_SL_HIT:
             # PE trade is running with SL and Target
             sl_order = self.trade.pe_sl_order
@@ -301,12 +322,12 @@ class ShortStraddle(BaseStrategy):
                 self.order_manager.cancel_order(sl_order)
                 self.strategy_state = ShortStraddleState.TARGET_HIT
 
-
     def set_target_for_remaining_position(self):
         """
             Sets the target order for the remaining position.
         """
         log_heading("Setting target order for the running position")
+        send_notification("Setting target order for the running position")
         if self.strategy_state == ShortStraddleState.CE_SL_HIT:
             target_price = Utils.round_to_exchange_price(
                 max(0.05, self.trade.total_sold_points - self.trade.total_target_points - self.trade.ce_sl_price)
@@ -350,6 +371,7 @@ class ShortStraddle(BaseStrategy):
                 self.stop_event.set()  # Signal other threads to stop
 
                 logging.info("Chase Target Phase: Target Achieved Signal Received!, Firing Target Orders")
+                send_notification("Chase Target Phase: Target Achieved Signal Received!, Firing Target Orders")
                 # Fire the orders
                 ce_order_id = self.order_manager.place_order(ce_target_order)
                 pe_order_id = self.order_manager.place_order(pe_target_order)
@@ -386,6 +408,7 @@ class ShortStraddle(BaseStrategy):
                 # if true meaning SL hit
                 if self.trade.ce_sl_order.order_status == OrderStatus.COMPLETE:
                     logging.info("CE SL Hit!")
+                    send_notification("CE SL Hit!")
                     # Modify SL of PE
                     order_modification_params = OrderModifyParams(
                         Utils.round_to_exchange_price(self.trade.pe_entry_order.average_price + 10),
@@ -394,6 +417,7 @@ class ShortStraddle(BaseStrategy):
                     self.strategy_state = ShortStraddleState.CE_SL_HIT
                 else :
                     logging.info("PE SL Hit!")
+                    send_notification("PE SL Hit!")
                     # Modify SL of CE
                     order_modification_params = OrderModifyParams(
                         Utils.round_to_exchange_price(self.trade.ce_entry_order.average_price + 10),
@@ -414,12 +438,14 @@ class ShortStraddle(BaseStrategy):
         ce_sold_price = self.trade.ce_entry_order.average_price
         pe_sold_price =  self.trade.pe_entry_order.average_price
         logging.info(f"CE SOLD PRICE: {ce_sold_price}, PE SOLD PRICE: {pe_sold_price}")
-
+        send_notification(f"CE SOLD PRICE: {ce_sold_price}, PE SOLD PRICE: {pe_sold_price}")
+        send_notification("Placing SL orders")
         # Calculate SL points
         sl_prices = self.calculate_sl_prices(ce_sold_price, pe_sold_price, self.trade.total_loss_points)
         self.trade.ce_sl_price = sl_prices["ce"]
         self.trade.pe_sl_price = sl_prices["pe"]
 
+        send_notification(f"CE SL: {self.trade.ce_sl_price}, PE SL: {self.trade.pe_sl_price}")
         # Create SL orders
         self.trade.ce_sl_order = self.create_sl_orders(self.trade.ce_option_symbol, self.trade.ce_sl_price)
         self.trade.pe_sl_order = self.create_sl_orders(self.trade.pe_option_symbol, self.trade.pe_sl_price)
@@ -432,6 +458,7 @@ class ShortStraddle(BaseStrategy):
         self.trade.order_id_mapping[ce_order_id] = self.trade.ce_sl_order
         self.trade.order_id_mapping[pe_order_id] = self.trade.pe_sl_order
         # Change state to SL order placed
+        send_notification("SL Order Placement Stage Complete")
         self.strategy_state = ShortStraddleState.SL_ORDER_PLACED
 
     @staticmethod
@@ -462,10 +489,12 @@ class ShortStraddle(BaseStrategy):
     def prepare_entry_orders(self):
         log_heading("Preparing Entry Orders")
         self.trade.ce_option_symbol, self.trade.pe_option_symbol = self.get_atm_options_symbols()
+        send_notification(f"Selling: {self.trade.ce_option_symbol}, {self.trade.pe_option_symbol}")
 
         # Calculate total loss points
         self.trade.total_loss_points = self.sl_atr_rule * self.atr_range
         logging.info(f"Total Loss Points: {self.trade.total_loss_points}")
+        send_notification(f"Total Loss Points: {self.trade.total_loss_points}")
 
         # calculate lot_size
         self.trade.lot_size = self.get_lot_size("NFO", self.trade.ce_option_symbol)
@@ -491,6 +520,7 @@ class ShortStraddle(BaseStrategy):
         log_heading("Entry Order Placement Stage")
 
         logging.info("Waiting for Start time.")
+        send_notification(f"Waiting for: {self.start_datetime}")
         while datetime.datetime.now() <= self.start_datetime:
             continue
         #  Fire the orders and store in a dict
@@ -499,6 +529,8 @@ class ShortStraddle(BaseStrategy):
 
         if (ce_order_id is None) or (pe_order_id is None):
             raise ValueError("Entry Order Placement Stage Failed")
+        send_notification(f"Sold CE PE options, {ce_order_id}, {pe_order_id}")
+
         # Map the orders
         self.trade.order_id_mapping[ce_order_id] = self.trade.ce_entry_order
         self.trade.order_id_mapping[pe_order_id] = self.trade.pe_entry_order

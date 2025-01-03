@@ -19,7 +19,11 @@ class Order:
         self.exchange_timestamp = None #Exchange timestamp
         self.last_order_update_timestamp = None # Applicable if you modify the order Ex: Trailing SL
         self.message = None # In case any order rejection or any other error save the response from broker in this field
-    
+        self.raw_update = [] # holds raw updates about the order
+        self.is_updating = False
+
+    def put_raw_data(self, data):
+        self.raw_update.append(data)
     def set_average_price(self, average_price):
         self.average_price = average_price
     def set_order_id(self, order_id):

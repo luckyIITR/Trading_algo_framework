@@ -14,7 +14,7 @@ class FyersLogin(BaseLogin):
     def login(self):
         self.client_id = self.broker_app_details.api_key
         self.secret_key =  self.broker_app_details.api_secret
-        self.redirect_uri = "https://www.google.com/"
+        self.redirect_uri = "https://iamlucky.co.in/login/fyers_callback"
         self.grant_type = "authorization_code"
         self.response_type = "code"
         self.state = "sample_state"

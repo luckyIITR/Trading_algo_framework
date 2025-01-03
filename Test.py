@@ -34,7 +34,7 @@ class Test:
 
         # sleep for 5 seconds and register trading symbols to receive ticks
         time.sleep(5)
-        ticker.register_symbol(['NIFTY24DEC23750CE'])
+        ticker.register_symbol(['ITC'])
         # wait for 10 seconds and stop ticker service
         time.sleep(10)
         logging.info('Going to stop ticker')
